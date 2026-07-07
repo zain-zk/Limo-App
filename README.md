@@ -8,9 +8,9 @@ A modern luxury limo website built with React, TypeScript, Vite, and Tailwind CS
 - WhatsApp and back-to-top interactions
 
 ## Getting Started
-1. Install dependencies with `pnpm install`
-2. Start the development server with `pnpm dev`
-3. Build for production with `pnpm build`
+1. Install dependencies with `npm install`
+2. Start the development server with `npm run dev`
+3. Build for production with `npm run build`
 
 ## Project Structure
 - `src/app/pages` contains the page components
