@@ -99,7 +99,7 @@ export function BookNow() {
 
       {/* Booking Form */}
       <section className="py-20">
-        <div className="max-w-3xl mx-auto px-4">
+        <div className="max-w-4xl mx-auto px-4">
           {submitted ? (
             <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
               <CardContent className="p-12 text-center">
@@ -130,28 +130,27 @@ export function BookNow() {
                       Personal Information
                     </h3>
 
-                    <div>
-                      <Label htmlFor="fullName" className="text-white flex items-center gap-2">
-                        <User className="w-4 h-4" /> Full Name *
-                      </Label>
-                      <Input
-                        id="fullName"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleChange}
-                        placeholder="John Doe"
-                        className={`mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white ${
-                          errors.fullName ? 'border-red-500' : ''
-                        }`}
-                      />
-                      {errors.fullName && (
-                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                          <AlertCircle className="w-3 h-3" /> {errors.fullName}
-                        </p>
-                      )}
-                    </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="md:col-span-2">
+                        <Label htmlFor="fullName" className="text-white flex items-center gap-2">
+                          <User className="w-4 h-4" /> Full Name *
+                        </Label>
+                        <Input
+                          id="fullName"
+                          name="fullName"
+                          value={formData.fullName}
+                          onChange={handleChange}
+                          placeholder="John Doe"
+                          className={`mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white ${
+                            errors.fullName ? 'border-red-500' : ''
+                          }`}
+                        />
+                        {errors.fullName && (
+                          <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" /> {errors.fullName}
+                          </p>
+                        )}
+                      </div>
                       <div>
                         <Label htmlFor="email" className="text-white flex items-center gap-2">
                           <Mail className="w-4 h-4" /> Email *
@@ -204,49 +203,48 @@ export function BookNow() {
                       Trip Details
                     </h3>
 
-                    <div>
-                      <Label htmlFor="pickupAddress" className="text-white flex items-center gap-2">
-                        <MapPin className="w-4 h-4" /> Pickup Address *
-                      </Label>
-                      <Input
-                        id="pickupAddress"
-                        name="pickupAddress"
-                        value={formData.pickupAddress}
-                        onChange={handleChange}
-                        placeholder="123 Main St, Toronto, ON"
-                        className={`mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white ${
-                          errors.pickupAddress ? 'border-red-500' : ''
-                        }`}
-                      />
-                      {errors.pickupAddress && (
-                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                          <AlertCircle className="w-3 h-3" /> {errors.pickupAddress}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <Label htmlFor="dropoffAddress" className="text-white flex items-center gap-2">
-                        <MapPin className="w-4 h-4" /> Drop-off Address *
-                      </Label>
-                      <Input
-                        id="dropoffAddress"
-                        name="dropoffAddress"
-                        value={formData.dropoffAddress}
-                        onChange={handleChange}
-                        placeholder="Toronto Pearson Airport"
-                        className={`mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white ${
-                          errors.dropoffAddress ? 'border-red-500' : ''
-                        }`}
-                      />
-                      {errors.dropoffAddress && (
-                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                          <AlertCircle className="w-3 h-3" /> {errors.dropoffAddress}
-                        </p>
-                      )}
-                    </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="pickupAddress" className="text-white flex items-center gap-2">
+                          <MapPin className="w-4 h-4" /> Pickup Address *
+                        </Label>
+                        <Input
+                          id="pickupAddress"
+                          name="pickupAddress"
+                          value={formData.pickupAddress}
+                          onChange={handleChange}
+                          placeholder="123 Main St, Toronto, ON"
+                          className={`mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white ${
+                            errors.pickupAddress ? 'border-red-500' : ''
+                          }`}
+                        />
+                        {errors.pickupAddress && (
+                          <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" /> {errors.pickupAddress}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <Label htmlFor="dropoffAddress" className="text-white flex items-center gap-2">
+                          <MapPin className="w-4 h-4" /> Drop-off Address *
+                        </Label>
+                        <Input
+                          id="dropoffAddress"
+                          name="dropoffAddress"
+                          value={formData.dropoffAddress}
+                          onChange={handleChange}
+                          placeholder="Toronto Pearson Airport"
+                          className={`mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white ${
+                            errors.dropoffAddress ? 'border-red-500' : ''
+                          }`}
+                        />
+                        {errors.dropoffAddress && (
+                          <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" /> {errors.dropoffAddress}
+                          </p>
+                        )}
+                      </div>
                       <div>
                         <Label htmlFor="date" className="text-white flex items-center gap-2">
                           <Calendar className="w-4 h-4" /> Date *
@@ -289,9 +287,7 @@ export function BookNow() {
                           </p>
                         )}
                       </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="passengers" className="text-white flex items-center gap-2">
                           <Users className="w-4 h-4" /> Number of Passengers *
@@ -341,21 +337,21 @@ export function BookNow() {
                           </p>
                         )}
                       </div>
-                    </div>
 
-                    <div>
-                      <Label htmlFor="specialInstructions" className="text-white">
-                        Special Instructions (Optional)
-                      </Label>
-                      <Textarea
-                        id="specialInstructions"
-                        name="specialInstructions"
-                        value={formData.specialInstructions}
-                        onChange={handleChange}
-                        placeholder="Any special requests or additional information..."
-                        rows={4}
-                        className="mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white"
-                      />
+                      <div className="md:col-span-2">
+                        <Label htmlFor="specialInstructions" className="text-white">
+                          Special Instructions (Optional)
+                        </Label>
+                        <Textarea
+                          id="specialInstructions"
+                          name="specialInstructions"
+                          value={formData.specialInstructions}
+                          onChange={handleChange}
+                          placeholder="Any special requests or additional information..."
+                          rows={4}
+                          className="mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white"
+                        />
+                      </div>
                     </div>
                   </div>
 

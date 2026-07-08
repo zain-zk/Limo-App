@@ -138,13 +138,13 @@ export function Home() {
               <h3 className="text-2xl text-[#D4AF37] mb-6 text-center" style={{ fontFamily: 'var(--font-heading)' }}>
                 Get an Instant Quote
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input placeholder="Pickup Location" className="bg-[#0F0F0F] border-[#D4AF37]/20 text-white" />
                 <Input placeholder="Drop-off Location" className="bg-[#0F0F0F] border-[#D4AF37]/20 text-white" />
                 <Input type="date" className="bg-[#0F0F0F] border-[#D4AF37]/20 text-white" />
                 <Input type="time" className="bg-[#0F0F0F] border-[#D4AF37]/20 text-white" />
-                <Button className="bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90">Estimate Fare</Button>
               </div>
+              <Button className="w-full mt-4 bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90">Estimate Fare</Button>
             </CardContent>
           </Card>
         </div>
@@ -161,15 +161,15 @@ export function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <Card key={index} className="bg-[#1A1A1A] border-[#D4AF37]/20 hover:border-[#D4AF37] transition-all">
-                <CardContent className="p-8 text-center">
+              <Card key={index} className="bg-[#1A1A1A] border-[#D4AF37]/20 hover:border-[#D4AF37] transition-all flex flex-col h-full">
+                <CardContent className="p-8 text-center flex flex-col flex-1">
                   <div className="w-16 h-16 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-6">
                     <service.icon className="w-8 h-8 text-[#D4AF37]" />
                   </div>
                   <h3 className="text-2xl text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
                     {service.title}
                   </h3>
-                  <p className="text-gray-400 mb-6">{service.description}</p>
+                  <p className="text-gray-400 mb-6 flex-1">{service.description}</p>
                   <Link to="/services" className="text-[#D4AF37] hover:underline">
                     Learn More →
                   </Link>
@@ -216,11 +216,11 @@ export function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {fleet.map((vehicle, index) => (
-              <Card key={index} className="bg-[#1A1A1A] border-[#D4AF37]/20 overflow-hidden">
+              <Card key={index} className="bg-[#1A1A1A] border-[#D4AF37]/20 overflow-hidden flex flex-col h-full">
                 <div className="h-48 bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] flex items-center justify-center">
                   <Car className="w-24 h-24 text-[#D4AF37]/30" />
                 </div>
-                <CardContent className="p-6">
+                <CardContent className="p-6 flex flex-col flex-1">
                   <h3 className="text-2xl text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
                     {vehicle.name}
                   </h3>
@@ -228,7 +228,7 @@ export function Home() {
                     <span>👥 {vehicle.passengers} Passengers</span>
                     <span>🧳 {vehicle.luggage} Bags</span>
                   </div>
-                  <ul className="space-y-2 mb-6">
+                  <ul className="space-y-2 mb-6 flex-1">
                     {vehicle.features.map((feature, i) => (
                       <li key={i} className="text-gray-400 text-sm">
                         ✓ {feature}

@@ -12,6 +12,7 @@ import { Pricing } from './pages/Pricing';
 import { Testimonials } from './pages/Testimonials';
 import { FAQ } from './pages/FAQ';
 import { Contact } from './pages/Contact';
+import { AdminWithProvider } from './pages/Admin';
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/testimonials" element={<Testimonials />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/admin" element={<AdminWithProvider />} />
         </Routes>
         <Footer />
         <WhatsAppButton />

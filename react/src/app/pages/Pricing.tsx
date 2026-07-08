@@ -71,9 +71,9 @@ export function Pricing() {
       {/* Quote Calculator */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Calculator Form */}
-            <div className="lg:col-span-2">
+            <div>
               <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
                 <CardHeader>
                   <CardTitle className="text-2xl text-white flex items-center gap-2" style={{ fontFamily: 'var(--font-heading)' }}>
@@ -83,82 +83,84 @@ export function Pricing() {
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                      <Label htmlFor="pickup" className="text-white">
-                        Pickup Location
-                      </Label>
-                      <Input
-                        id="pickup"
-                        name="pickup"
-                        value={formData.pickup}
-                        onChange={handleChange}
-                        placeholder="Enter pickup address"
-                        className="mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white"
-                      />
-                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="pickup" className="text-white">
+                          Pickup Location
+                        </Label>
+                        <Input
+                          id="pickup"
+                          name="pickup"
+                          value={formData.pickup}
+                          onChange={handleChange}
+                          placeholder="Enter pickup address"
+                          className="mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white"
+                        />
+                      </div>
 
-                    <div>
-                      <Label htmlFor="dropoff" className="text-white">
-                        Drop-off Location
-                      </Label>
-                      <Input
-                        id="dropoff"
-                        name="dropoff"
-                        value={formData.dropoff}
-                        onChange={handleChange}
-                        placeholder="Enter drop-off address"
-                        className="mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white"
-                      />
-                    </div>
+                      <div>
+                        <Label htmlFor="dropoff" className="text-white">
+                          Drop-off Location
+                        </Label>
+                        <Input
+                          id="dropoff"
+                          name="dropoff"
+                          value={formData.dropoff}
+                          onChange={handleChange}
+                          placeholder="Enter drop-off address"
+                          className="mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white"
+                        />
+                      </div>
 
-                    <div>
-                      <Label htmlFor="date" className="text-white">
-                        Date
-                      </Label>
-                      <Input
-                        id="date"
-                        name="date"
-                        type="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                        min={new Date().toISOString().split('T')[0]}
-                        className="mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white"
-                      />
-                    </div>
+                      <div>
+                        <Label htmlFor="date" className="text-white">
+                          Date
+                        </Label>
+                        <Input
+                          id="date"
+                          name="date"
+                          type="date"
+                          value={formData.date}
+                          onChange={handleChange}
+                          min={new Date().toISOString().split('T')[0]}
+                          className="mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white"
+                        />
+                      </div>
 
-                    <div>
-                      <Label htmlFor="vehicleType" className="text-white">
-                        Vehicle Type *
-                      </Label>
-                      <select
-                        id="vehicleType"
-                        name="vehicleType"
-                        value={formData.vehicleType}
-                        onChange={handleChange}
-                        className="mt-2 w-full h-10 px-3 rounded-md bg-[#0F0F0F] border border-[#D4AF37]/20 text-white"
-                      >
-                        <option value="">Select a vehicle</option>
-                        <option value="yukon">GMC Yukon XL - $75 base</option>
-                        <option value="denali">GMC Yukon Denali - $95 base</option>
-                        <option value="escalade">Cadillac Escalade - $120 base</option>
-                        <option value="suburban">Chevrolet Suburban - $85 base</option>
-                      </select>
-                    </div>
+                      <div>
+                        <Label htmlFor="passengers" className="text-white">
+                          Number of Passengers
+                        </Label>
+                        <Input
+                          id="passengers"
+                          name="passengers"
+                          type="number"
+                          min="1"
+                          max="10"
+                          value={formData.passengers}
+                          onChange={handleChange}
+                          className="mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white"
+                        />
+                      </div>
 
-                    <div>
-                      <Label htmlFor="passengers" className="text-white">
-                        Number of Passengers
-                      </Label>
-                      <Input
-                        id="passengers"
-                        name="passengers"
-                        type="number"
-                        min="1"
-                        max="10"
-                        value={formData.passengers}
-                        onChange={handleChange}
-                        className="mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white"
-                      />
+                      <div className="md:col-span-2">
+                        <Label htmlFor="vehicleType" className="text-white">
+                          Vehicle Type *
+                        </Label>
+                        <select
+                          id="vehicleType"
+                          name="vehicleType"
+                          value={formData.vehicleType}
+                          onChange={handleChange}
+                          className="mt-2 w-full h-10 px-3 rounded-md bg-[#0F0F0F] border border-[#D4AF37]/20 text-white"
+                        >
+                          <option value="">Select a vehicle</option>
+                          <option value="yukon">GMC Yukon XL - $75 base</option>
+                          <option value="denali">GMC Yukon Denali - $95 base</option>
+                          <option value="escalade">Cadillac Escalade - $120 base</option>
+                          <option value="suburban">Chevrolet Suburban - $85 base</option>
+                        </select>
+                      </div>
                     </div>
 
                     <Button

@@ -151,14 +151,14 @@ export function Fleet() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {vehicles.map((vehicle, index) => (
-              <Card key={index} className="bg-[#1A1A1A] border-[#D4AF37]/20 hover:border-[#D4AF37] transition-all overflow-hidden">
+              <Card key={index} className="bg-[#1A1A1A] border-[#D4AF37]/20 hover:border-[#D4AF37] transition-all overflow-hidden flex flex-col h-full">
                 <div className="h-56 bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] flex items-center justify-center relative">
                   <Car className="w-32 h-32 text-[#D4AF37]/30" />
                   <div className="absolute top-4 right-4 bg-[#D4AF37] text-[#0F0F0F] px-3 py-1 rounded-full text-xs font-bold">
                     LUXURY
                   </div>
                 </div>
-                <CardContent className="p-6">
+                <CardContent className="p-6 flex flex-col flex-1">
                   <h3 className="text-2xl text-white mb-1" style={{ fontFamily: 'var(--font-heading)' }}>
                     {vehicle.name}
                   </h3>
@@ -177,7 +177,7 @@ export function Fleet() {
 
                   <p className="text-gray-400 text-sm mb-4">{vehicle.description}</p>
 
-                  <div className="mb-6">
+                  <div className="mb-6 flex-1">
                     <h4 className="text-white text-sm mb-3">Features:</h4>
                     <ul className="grid grid-cols-2 gap-2">
                       {vehicle.features.map((feature, i) => (

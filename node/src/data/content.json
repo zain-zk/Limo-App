@@ -1,0 +1,113 @@
+{
+  "site": {
+    "name": "High5 Limo",
+    "tagline": "Premium Limousine Service Across Canada",
+    "phone": "+1 (234) 567-890",
+    "email": "info@high5limo.com",
+    "whatsapp": "1234567890",
+    "address": {
+      "street": "123 Luxury Lane",
+      "city": "Toronto",
+      "province": "ON",
+      "postal": "M5H 2N2",
+      "country": "Canada"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Premium Limousine Service",
+      "titleHighlight": "Across Canada",
+      "subtitle": "Airport Transfers, Weddings, Corporate Travel, and Special Events",
+      "ctaButtons": [
+        { "label": "Book Now", "link": "/book", "variant": "primary" },
+        { "label": "Get a Quote", "link": "/pricing", "variant": "outline" },
+        { "label": "WhatsApp Us", "link": "whatsapp", "variant": "ghost" }
+      ]
+    },
+    "quoteWidget": {
+      "title": "Get an Instant Quote",
+      "buttonLabel": "Estimate Fare"
+    },
+    "services": [
+      {
+        "icon": "Car",
+        "title": "Airport Transfer",
+        "description": "Reliable pickup and drop-off service to all major airports across Canada. Track your flight for timely arrivals."
+      },
+      {
+        "icon": "Users",
+        "title": "Wedding Service",
+        "description": "Make your special day unforgettable with our luxury fleet. Professional chauffeurs ensure a stress-free experience."
+      },
+      {
+        "icon": "Briefcase",
+        "title": "Corporate Travel",
+        "description": "Professional transportation for business meetings, conferences, and corporate events. Impress your clients."
+      }
+    ],
+    "whyChooseUs": [
+      { "icon": "Clock", "title": "Always Punctual", "description": "24/7 on-time service" },
+      { "icon": "Car", "title": "Luxury Fleet", "description": "Premium GMC vehicles" },
+      { "icon": "Shield", "title": "Licensed Drivers", "description": "Professional & safe" },
+      { "icon": "Headphones", "title": "24/7 Support", "description": "Always here for you" }
+    ],
+    "fleet": [
+      {
+        "name": "GMC Yukon XL",
+        "passengers": 6,
+        "luggage": 6,
+        "features": ["Wi-Fi", "Leather Seats", "Climate Control", "Premium Sound"]
+      },
+      {
+        "name": "GMC Yukon Denali",
+        "passengers": 6,
+        "luggage": 5,
+        "features": ["Wi-Fi", "Heated Seats", "Panoramic Roof", "Entertainment System"]
+      },
+      {
+        "name": "Cadillac Escalade",
+        "passengers": 7,
+        "luggage": 7,
+        "features": ["Wi-Fi", "Premium Interior", "Advanced Safety", "Luxury Comfort"]
+      }
+    ],
+    "testimonials": [
+      {
+        "name": "Sarah Johnson",
+        "role": "Corporate Executive",
+        "rating": 5,
+        "text": "Exceptional service! The driver was professional, punctual, and the vehicle was pristine. High5 Limo made my airport transfer seamless."
+      },
+      {
+        "name": "Michael Chen",
+        "role": "Groom",
+        "rating": 5,
+        "text": "Our wedding day transportation was perfect thanks to High5 Limo. The GMC Yukon XL was luxurious and accommodated our entire wedding party comfortably."
+      },
+      {
+        "name": "Emily Rodriguez",
+        "role": "Business Traveler",
+        "rating": 5,
+        "text": "I use High5 Limo for all my business trips. Reliable, professional, and always on time. The best limo service in Canada!"
+      }
+    ],
+    "cta": {
+      "title": "Ready to Ride in",
+      "titleHighlight": "Luxury?",
+      "subtitle": "Book your premium limousine service today and experience the High5 difference.",
+      "buttonLabel": "Book Your Ride Now",
+      "buttonLink": "/book"
+    }
+  },
+  "navigation": [
+    { "label": "Home", "path": "/" },
+    { "label": "About", "path": "/about" },
+    { "label": "Services", "path": "/services" },
+    { "label": "Fleet", "path": "/fleet" },
+    { "label": "Book Now", "path": "/book" },
+    { "label": "Pricing", "path": "/pricing" },
+    { "label": "Testimonials", "path": "/testimonials" },
+    { "label": "FAQ", "path": "/faq" },
+    { "label": "Contact", "path": "/contact" }
+  ]
+}

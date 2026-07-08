@@ -96,10 +96,10 @@ export function Services() {
       {/* Services Grid */}
       <section className="py-20 bg-[#0F0F0F]">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <Card key={index} className="bg-[#1A1A1A] border-[#D4AF37]/20 hover:border-[#D4AF37] transition-all">
-                <CardContent className="p-8">
+              <Card key={index} className="bg-[#1A1A1A] border-[#D4AF37]/20 hover:border-[#D4AF37] transition-all flex flex-col h-full">
+                <CardContent className="p-8 flex flex-col flex-1">
                   <div className="w-16 h-16 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mb-6">
                     <service.icon className="w-8 h-8 text-[#D4AF37]" />
                   </div>
@@ -107,7 +107,7 @@ export function Services() {
                     {service.title}
                   </h3>
                   <p className="text-gray-400 mb-6">{service.description}</p>
-                  <ul className="space-y-2 mb-6">
+                  <ul className="space-y-2 mb-6 flex-1">
                     {service.features.map((feature, i) => (
                       <li key={i} className="text-gray-300 flex items-center">
                         <span className="text-[#D4AF37] mr-2">✓</span>

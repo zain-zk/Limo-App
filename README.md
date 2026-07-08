@@ -1,21 +1,45 @@
-# Limo App
+# High5 Limo
 
-A modern luxury limo website built with React, TypeScript, Vite, and Tailwind CSS.
+Monorepo with separate frontend and backend for the public website and admin CMS.
 
-## Features
-- Responsive landing pages for home, fleet, services, pricing, testimonials, FAQ, booking, and contact
-- Reusable UI components and polished styling
-- WhatsApp and back-to-top interactions
+## Structure
 
-## Getting Started
-1. Install dependencies with `npm install`
-2. Start the development server with `npm run dev`
-3. Build for production with `npm run build`
+```
+Limo-App/
+├── react/          # Public website (Vite + React)
+├── node/           # CMS API (Express + JSON content store)
+└── package.json    # Root scripts to run both apps
+```
 
-## Project Structure
-- `src/app/pages` contains the page components
-- `src/app/components` contains shared UI and layout components
-- `src/styles` contains the global styling and theme files
+## Run locally
 
-## Deployment
-This project is ready to be deployed to any static hosting platform such as Vercel, Netlify, or GitHub Pages.
+```bash
+# Install all dependencies
+npm run install:all
+
+# Run React (port 5173) + Node API (port 3001)
+npm run dev
+```
+
+Or run separately:
+
+```bash
+npm run dev:react   # http://localhost:5173
+npm run dev:node    # http://localhost:3001
+```
+
+## CMS API (Node)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/health` | GET | Health check |
+| `/api/content` | GET | All site content |
+| `/api/content/:section` | GET | One section (e.g. `home`, `site`) |
+| `/api/content/:section` | PUT | Update section (admin CMS) |
+
+Content is stored in `node/src/data/content.json`. The React app proxies `/api` to the Node server during development.
+
+## Next step: Admin CMS
+
+- Build admin UI at `/admin` to edit content props
+- Wire pages to `useContent()` so changes reflect on the live site

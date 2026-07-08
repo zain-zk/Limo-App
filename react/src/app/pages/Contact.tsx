@@ -76,10 +76,10 @@ export function Contact() {
       {/* Contact Information & Form */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Contact Info */}
-            <div className="space-y-6">
-              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20 h-full">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -98,7 +98,7 @@ export function Contact() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
+              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20 h-full">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -120,7 +120,7 @@ export function Contact() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
+              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20 h-full">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -139,7 +139,7 @@ export function Contact() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
+              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20 h-full">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -161,7 +161,7 @@ export function Contact() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
+              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20 sm:col-span-2">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -183,9 +183,9 @@ export function Contact() {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2">
+            <div>
               {submitted ? (
-                <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
+                <Card className="bg-[#1A1A1A] border-[#D4AF37]/20 h-full">
                   <CardContent className="p-12 text-center">
                     <div className="w-20 h-20 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-6">
                       <CheckCircle className="w-10 h-10 text-[#D4AF37]" />
@@ -199,34 +199,34 @@ export function Contact() {
                   </CardContent>
                 </Card>
               ) : (
-                <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
+                <Card className="bg-[#1A1A1A] border-[#D4AF37]/20 h-full">
                   <CardContent className="p-8">
                     <h2 className="text-3xl text-white mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
                       Send Us a <span className="text-[#D4AF37]">Message</span>
                     </h2>
                     <form onSubmit={handleSubmit} className="space-y-6">
-                      <div>
-                        <Label htmlFor="name" className="text-white">
-                          Your Name *
-                        </Label>
-                        <Input
-                          id="name"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          placeholder="John Doe"
-                          className={`mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white ${
-                            errors.name ? 'border-red-500' : ''
-                          }`}
-                        />
-                        {errors.name && (
-                          <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                            <AlertCircle className="w-3 h-3" /> {errors.name}
-                          </p>
-                        )}
-                      </div>
-
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="md:col-span-2">
+                          <Label htmlFor="name" className="text-white">
+                            Your Name *
+                          </Label>
+                          <Input
+                            id="name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            placeholder="John Doe"
+                            className={`mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white ${
+                              errors.name ? 'border-red-500' : ''
+                            }`}
+                          />
+                          {errors.name && (
+                            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> {errors.name}
+                            </p>
+                          )}
+                        </div>
+
                         <div>
                           <Label htmlFor="email" className="text-white">
                             Email Address *
@@ -270,28 +270,28 @@ export function Contact() {
                             </p>
                           )}
                         </div>
-                      </div>
 
-                      <div>
-                        <Label htmlFor="message" className="text-white">
-                          Your Message *
-                        </Label>
-                        <Textarea
-                          id="message"
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          placeholder="Tell us about your transportation needs..."
-                          rows={6}
-                          className={`mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white ${
-                            errors.message ? 'border-red-500' : ''
-                          }`}
-                        />
-                        {errors.message && (
-                          <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                            <AlertCircle className="w-3 h-3" /> {errors.message}
-                          </p>
-                        )}
+                        <div className="md:col-span-2">
+                          <Label htmlFor="message" className="text-white">
+                            Your Message *
+                          </Label>
+                          <Textarea
+                            id="message"
+                            name="message"
+                            value={formData.message}
+                            onChange={handleChange}
+                            placeholder="Tell us about your transportation needs..."
+                            rows={6}
+                            className={`mt-2 bg-[#0F0F0F] border-[#D4AF37]/20 text-white ${
+                              errors.message ? 'border-red-500' : ''
+                            }`}
+                          />
+                          {errors.message && (
+                            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> {errors.message}
+                            </p>
+                          )}
+                        </div>
                       </div>
 
                       <Button
