@@ -1,4 +1,5 @@
 import { Car, Users, Briefcase, Wifi, Snowflake, Music } from 'lucide-react';
+import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 
@@ -189,9 +190,9 @@ export function Fleet() {
                     </ul>
                   </div>
 
-                  <Button className="w-full bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90">
-                    Book This Vehicle
-                  </Button>
+                  <Link to="/book">
+                    <Button className="w-full bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90 font-semibold">Book This Vehicle</Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
@@ -208,9 +209,9 @@ export function Fleet() {
           <p className="text-xl text-gray-300 mb-8">
             Our team can help you select the perfect vehicle for your needs and occasion.
           </p>
-          <Button className="bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90 text-lg px-8 py-6">
-            Get Expert Advice
-          </Button>
+          <Link to="/contact">
+            <Button className="bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90 text-lg px-8 py-6 font-semibold">Get Expert Advice</Button>
+          </Link>
         </div>
       </section>
     </div>

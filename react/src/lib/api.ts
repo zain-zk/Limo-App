@@ -39,3 +39,48 @@ export async function updateSection<T extends keyof CmsContent>(
   const result = await response.json();
   return result.data;
 }
+
+export interface BookingPayload {
+  fullName: string;
+  phone: string;
+  pickupAddress: string;
+  dropoffAddress: string;
+  date: string;
+  time: string;
+  passengers: string;
+  luggage: string;
+  serviceType: string;
+  paymentMethod: 'online' | 'driver';
+  flightNumber?: string;
+  specialInstructions?: string;
+}
+
+export async function submitBooking(data: BookingPayload) {
+  const response = await fetch(`${API_BASE}/bookings`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to submit booking');
+  }
+
+  return response.json();
+}
+
+export async function submitContact(data: { name: string; phone: string; message: string }) {
+  const response = await fetch(`${API_BASE}/contact`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to send message');
+  }
+
+  return response.json();
+}

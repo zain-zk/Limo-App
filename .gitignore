@@ -3,3 +3,12 @@ package-lock.json
 dist/
 .env
 node/src/data/content.json.bak
+node/src/data/bookings.json
+node/src/data/contact-messages.json
+
+# Local docs / notes (not part of the app)
+docs/
+*.docx
+
+# Optional editor recommendations (launch.json is kept for debugging)
+.vscode/extensions.json

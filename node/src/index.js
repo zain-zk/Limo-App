@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import contentRoutes from './routes/content.js';
+import bookingRoutes from './routes/bookings.js';
+import contactRoutes from './routes/contact.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -13,6 +15,8 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/content', contentRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/contact', contactRoutes);
 
 app.listen(PORT, () => {
   console.log(`CMS API running at http://localhost:${PORT}`);

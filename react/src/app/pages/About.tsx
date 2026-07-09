@@ -1,4 +1,4 @@
-import { Shield, Award, Users, Clock } from 'lucide-react';
+import { Shield, Award, Users, Clock, Car, Heart } from 'lucide-react';
 
 export function About() {
   const values = [
@@ -73,6 +73,28 @@ export function About() {
                 <div className="text-white text-xl">Years of Excellence</div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PDF-required focus areas */}
+      <section className="py-20 bg-[#0B1F3A]">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              { icon: Award, title: 'Professional Experience', description: 'Over 10 years serving Canada with expert chauffeurs trained in safety, discretion, and luxury hospitality.' },
+              { icon: Shield, title: 'Commitment To Safety', description: 'Licensed, insured drivers with background checks. Every vehicle maintained to the highest safety standards.' },
+              { icon: Car, title: 'Commitment To Luxury Service', description: 'Premium GMC luxury vehicles with leather interiors, climate control, Wi-Fi, and amenities for every journey.' },
+              { icon: Heart, title: 'Customer Satisfaction Focus', description: 'Your comfort and satisfaction drive everything we do — from booking to drop-off, we exceed expectations.' },
+            ].map((item, index) => (
+              <div key={index} className="bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-lg p-8 text-center">
+                <div className="w-16 h-16 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <item.icon className="w-8 h-8 text-[#D4AF37]" />
+                </div>
+                <h3 className="text-xl text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>{item.title}</h3>
+                <p className="text-gray-400">{item.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

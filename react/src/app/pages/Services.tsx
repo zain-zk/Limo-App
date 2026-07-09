@@ -1,4 +1,5 @@
-import { Plane, Heart, Briefcase, PartyPopper, MapPin, Building2 } from 'lucide-react';
+import { Link } from 'react-router';
+import { Plane, Heart, Briefcase, PartyPopper, MapPin, Timer } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 
@@ -6,75 +7,45 @@ export function Services() {
   const services = [
     {
       icon: Plane,
-      title: 'Airport Pickup & Drop-Off',
+      title: 'Airport Transfers',
       description:
-        'Start or end your journey stress-free with our reliable airport transfer service. We monitor flight times to ensure timely pickups, even if your flight is delayed. Available at all major Canadian airports including Toronto Pearson, Vancouver International, and Montreal-Trudeau.',
-      features: [
-        'Flight tracking for on-time service',
-        'Meet & greet at arrivals',
-        'Assistance with luggage',
-        'Flexible scheduling',
-      ],
-    },
-    {
-      icon: MapPin,
-      title: 'Short Routes',
-      description:
-        'Need a quick ride across town? Our short-route service is perfect for business meetings, dinner reservations, or any local transportation needs. Enjoy luxury and comfort even on shorter trips.',
-      features: [
-        'Ideal for city travel',
-        'Professional chauffeurs',
-        'Luxury vehicles',
-        'Competitive pricing',
-      ],
-    },
-    {
-      icon: MapPin,
-      title: 'Long Routes',
-      description:
-        'Travel between cities in comfort and style. Whether it\'s Toronto to Ottawa or Vancouver to Whistler, our long-distance service ensures a relaxing journey with all the amenities you need.',
-      features: [
-        'Intercity transfers',
-        'Rest stops included',
-        'Wi-Fi and entertainment',
-        'Refreshments available',
-      ],
-    },
-    {
-      icon: Heart,
-      title: 'Wedding Service',
-      description:
-        'Make your special day even more memorable with our elegant wedding transportation. From the ceremony to the reception, we ensure the bride, groom, and wedding party arrive in style and on time.',
-      features: [
-        'Red carpet service',
-        'Decorated vehicles',
-        'Multiple trip coordination',
-        'Champagne service',
-      ],
-    },
-    {
-      icon: PartyPopper,
-      title: 'Special Occasions',
-      description:
-        'Celebrate life\'s special moments with High5 Limo. Perfect for proms, anniversaries, birthdays, or any celebration. Our luxury vehicles and professional service will make your event unforgettable.',
-      features: [
-        'Customized experiences',
-        'Group accommodations',
-        'Special requests welcome',
-        'Photo opportunities',
-      ],
+        'Reliable airport pickups and drop-offs with flight tracking. We monitor your flight to ensure timely arrivals at Toronto Pearson, Vancouver, Montreal, and all major Canadian airports.',
+      features: ['Flight tracking', 'Meet & greet', 'Luggage assistance', 'Flexible scheduling'],
     },
     {
       icon: Briefcase,
-      title: 'Corporate Travel',
+      title: 'Corporate Transportation',
       description:
-        'Impress clients and ensure your team travels efficiently. Our corporate service includes executive vehicles, professional chauffeurs, and flexible scheduling to meet your business needs.',
-      features: [
-        'Corporate accounts available',
-        'Conference transportation',
-        'Multi-stop itineraries',
-        'Invoicing and reporting',
-      ],
+        'Executive travel for business meetings, conferences, and corporate events. Impress clients with professional chauffeurs and luxury GMC vehicles.',
+      features: ['Corporate accounts', 'Conference transport', 'Multi-stop itineraries', 'Invoicing available'],
+    },
+    {
+      icon: Heart,
+      title: 'Weddings',
+      description:
+        'Make your special day unforgettable with elegant wedding transportation. From ceremony to reception, arrive in style with our luxury fleet.',
+      features: ['Red carpet service', 'Decorated vehicles', 'Wedding party transport', 'Champagne service'],
+    },
+    {
+      icon: PartyPopper,
+      title: 'Special Events',
+      description:
+        'Luxury transportation for proms, anniversaries, birthdays, and celebrations. Customized experiences for every special occasion.',
+      features: ['Customized experiences', 'Group accommodations', 'Special requests welcome', 'Photo opportunities'],
+    },
+    {
+      icon: Timer,
+      title: 'Hourly Chauffeur Service',
+      description:
+        'Flexible hourly bookings for events, shopping, or multi-stop itineraries. Your personal chauffeur at your pace.',
+      features: ['Flexible hourly rates', 'Multi-stop trips', 'Wait time included', 'Premium vehicles'],
+    },
+    {
+      icon: MapPin,
+      title: 'Long Distance Transportation',
+      description:
+        'Travel between cities in comfort and style. Toronto to Ottawa, Vancouver to Whistler, and more with rest stops and amenities.',
+      features: ['Intercity transfers', 'Rest stops included', 'Wi-Fi & entertainment', 'Refreshments available'],
     },
   ];
 
@@ -115,7 +86,9 @@ export function Services() {
                       </li>
                     ))}
                   </ul>
-                  <Button className="w-full bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90">Book Now</Button>
+                  <Link to="/book">
+                    <Button className="w-full bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90 font-semibold">Book Now</Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
@@ -132,9 +105,9 @@ export function Services() {
           <p className="text-xl text-gray-300 mb-8">
             Have specific requirements? Contact us to discuss your unique transportation needs.
           </p>
-          <Button className="bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90 text-lg px-8 py-6">
-            Contact Us
-          </Button>
+          <Link to="/contact">
+            <Button className="bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90 text-lg px-8 py-6 font-semibold">Contact Us</Button>
+          </Link>
         </div>
       </section>
     </div>

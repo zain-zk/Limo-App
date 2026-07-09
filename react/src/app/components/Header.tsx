@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { Menu, X, Phone } from 'lucide-react';
 import { Button } from './ui/button';
+import { SITE_PHONE } from '../../lib/constants';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -12,7 +13,7 @@ export function Header() {
     { name: 'Services', href: '/services' },
     { name: 'Fleet', href: '/fleet' },
     { name: 'Book Now', href: '/book' },
-    { name: 'Pricing', href: '/pricing' },
+    { name: 'Request Quote', href: '/pricing' },
     { name: 'Testimonials', href: '/testimonials' },
     { name: 'FAQ', href: '/faq' },
     { name: 'Contact', href: '/contact' },
@@ -45,7 +46,7 @@ export function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center space-x-4">
-            <a href="tel:+1234567890" className="flex items-center text-[#D4AF37] hover:text-white transition-colors">
+            <a href={`tel:${SITE_PHONE}`} className="flex items-center text-[#D4AF37] hover:text-white transition-colors">
               <Phone className="w-4 h-4 mr-2" />
               <span className="text-sm">Call Now</span>
             </a>
@@ -82,7 +83,7 @@ export function Header() {
             ))}
             <div className="pt-4 space-y-3">
               <a
-                href="tel:+1234567890"
+                href={`tel:${SITE_PHONE}`}
                 className="flex items-center text-[#D4AF37] hover:text-white transition-colors text-lg"
               >
                 <Phone className="w-5 h-5 mr-2" />

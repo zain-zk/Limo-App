@@ -1,59 +1,51 @@
 import { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
+import { Link } from 'react-router';
+import { SITE_PHONE } from '../../lib/constants';
 
 export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs = [
     {
-      question: 'How do I book a ride with High5 Limo?',
-      answer:
-        'Booking with High5 Limo is easy! You can book through our website by filling out the booking form, calling our 24/7 hotline at +1 (234) 567-890, or sending us a message on WhatsApp. Simply provide your pickup location, destination, date, and time, and we\'ll confirm your reservation within minutes.',
+      question: 'How do I book a ride?',
+      answer: 'Booking is easy! Fill out our online booking form at high5limo.ca/book, call our 24/7 hotline, or send us a WhatsApp message. Provide your pickup location, destination, date, time, and passenger details. Our team will contact you with a personalized quote.',
+    },
+    {
+      question: 'Can I pay online?',
+      answer: 'Yes! When booking, you can choose Pay Online (via Stripe once your quote is confirmed) or Pay Driver (pay in person during your ride). Our admin will confirm payment details when contacting you with your quote.',
     },
     {
       question: 'Do you operate 24/7?',
-      answer:
-        'Yes! High5 Limo operates 24 hours a day, 7 days a week, including holidays. Whether you need an early morning airport pickup or late-night event transportation, our professional chauffeurs are always ready to serve you.',
+      answer: 'Yes! High5 Limo operates 24 hours a day, 7 days a week, including holidays. Whether you need an early morning airport pickup or late-night event transportation, our professional chauffeurs are always ready.',
     },
     {
-      question: 'Can I cancel or modify my booking?',
-      answer:
-        'Yes, you can cancel or modify your booking. We require at least 4 hours notice for cancellations to receive a full refund. For modifications to your trip (time, location, etc.), please contact us as soon as possible. We\'ll do our best to accommodate your changes based on availability.',
+      question: 'Can I schedule rides in advance?',
+      answer: 'Absolutely. We encourage advance bookings for airport transfers, weddings, and corporate events. Simply submit your booking request with your preferred date and time, and our team will confirm availability.',
     },
     {
-      question: 'How is pricing calculated?',
-      answer:
-        'Our pricing is based on several factors including vehicle type, distance, duration, and time of day. Base rates start at $75 for our GMC Yukon XL. Additional costs may include wait time, tolls, parking fees, and gratuity. Use our online quote calculator for an instant estimate, or contact us for a detailed quote. All prices are in Canadian dollars.',
-    },
-    {
-      question: 'Do you provide child seats?',
-      answer:
-        'Yes, we can provide child safety seats upon request at no additional charge. We have infant seats, convertible seats, and booster seats available. Please specify your child seat requirements when booking, including the child\'s age and weight, so we can ensure the appropriate seat is installed.',
+      question: 'Do you provide airport transportation?',
+      answer: 'Yes! Airport transfers are one of our core services. We provide pickups and drop-offs at all major Canadian airports with flight tracking, meet & greet, and luggage assistance.',
     },
     {
       question: 'What areas do you serve?',
-      answer:
-        'High5 Limo serves all major cities and airports across Canada, including Toronto, Vancouver, Montreal, Calgary, and Ottawa. We also provide long-distance intercity transfers. Contact us if you\'re unsure whether we serve your location.',
+      answer: 'We serve the Greater Toronto Area including Toronto, Mississauga, Brampton, Vaughan, and Hamilton, as well as major cities across Canada. Contact us for intercity and long-distance transfers.',
     },
     {
       question: 'Are your drivers licensed and insured?',
-      answer:
-        'Absolutely! All our chauffeurs are fully licensed, insured, and have undergone comprehensive background checks. They are professional drivers with years of experience and training in customer service, safety, and defensive driving.',
+      answer: 'All our chauffeurs are fully licensed, insured, and background-checked with years of professional driving experience.',
     },
     {
-      question: 'What amenities are included in your vehicles?',
-      answer:
-        'All our vehicles come standard with Wi-Fi connectivity, climate control, premium sound systems, leather seats, bottled water, and phone chargers. Our luxury models also feature heated/cooled seats, entertainment systems, and panoramic sunroofs.',
+      question: 'What amenities are included?',
+      answer: 'All vehicles include Wi-Fi, climate control, premium sound systems, leather seats, bottled water, and phone chargers. Luxury models feature heated seats and entertainment systems.',
     },
     {
       question: 'Do you track flights for airport pickups?',
-      answer:
-        'Yes! When you book an airport transfer, we automatically track your flight in real-time. If your flight is delayed or arrives early, we adjust your pickup time accordingly at no extra charge. Your chauffeur will be ready when you land.',
+      answer: 'Yes! We automatically track your flight in real-time. If your flight is delayed or arrives early, we adjust your pickup time at no extra charge.',
     },
     {
-      question: 'What is your payment policy?',
-      answer:
-        'We accept all major credit cards, debit cards, and cash. Payment can be made when booking online or after your trip. For corporate clients, we offer invoicing and account services. Gratuity is not included in the base fare but is always appreciated for exceptional service.',
+      question: 'How does pricing work?',
+      answer: 'High5 Limo uses a manual quote system. Submit your booking request and our admin team will contact you with a personalized, transparent quote. No automatic fare calculator — every trip is priced individually.',
     },
   ];
 
@@ -119,16 +111,10 @@ export function FAQ() {
             Our team is here to help! Contact us anytime, and we'll be happy to assist you.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/contact"
-              className="inline-block bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90 px-8 py-4 rounded-md transition-colors text-lg font-medium"
-            >
+            <Link to="/contact" className="inline-block bg-[#D4AF37] text-[#0B0B0B] hover:bg-[#D4AF37]/90 px-8 py-4 rounded-md transition-colors text-lg font-semibold">
               Contact Us
-            </a>
-            <a
-              href="tel:+1234567890"
-              className="inline-block border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0F0F0F] px-8 py-4 rounded-md transition-colors text-lg font-medium"
-            >
+            </Link>
+            <a href={`tel:${SITE_PHONE}`} className="inline-block border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0B0B0B] px-8 py-4 rounded-md transition-colors text-lg font-semibold">
               Call Now
             </a>
           </div>

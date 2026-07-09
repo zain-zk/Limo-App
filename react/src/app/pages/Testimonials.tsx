@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react';
+import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 
@@ -154,15 +155,14 @@ export function Testimonials() {
             Experience the luxury and professionalism that our clients rave about.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90 text-lg px-8 py-6">
-              Book Your Ride
-            </Button>
-            <Button
-              variant="outline"
-              className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0F0F0F] text-lg px-8 py-6"
-            >
-              Leave a Review
-            </Button>
+            <Link to="/book">
+              <Button className="bg-[#D4AF37] text-[#0F0F0F] hover:bg-[#D4AF37]/90 text-lg px-8 py-6 font-semibold">Book Your Ride</Button>
+            </Link>
+            <Link to="/contact">
+              <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0F0F0F] text-lg px-8 py-6 font-semibold">
+                Leave a Review
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
