@@ -2,14 +2,17 @@ import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { MessageSquare, Phone, ArrowRight, CheckCircle } from 'lucide-react';
-import { SITE_PHONE, SITE_PHONE_DISPLAY } from '../../lib/constants';
+import { useContent } from '../../context/ContentContext';
+import { phoneHref } from '../../lib/phone';
 
 export function Pricing() {
+  const { site } = useContent();
+
   const steps = [
     { title: 'Submit Request', description: 'Fill out the booking form with your trip details.' },
     { title: 'Admin Review', description: 'Our team reviews your request and prepares a personalized quote.' },
     { title: 'We Contact You', description: 'An admin contacts you with the final quote via phone.' },
-    { title: 'Confirm Booking', description: 'Once confirmed, your luxury ride is scheduled.' },
+    { title: 'Confirm & Pay', description: 'Confirm the quote, then pay online or pay the driver on the day.' },
   ];
 
   return (
@@ -20,7 +23,7 @@ export function Pricing() {
             Request a <span className="text-[#D4AF37]">Quote</span>
           </h1>
           <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-8"></div>
-          <p className="text-xl text-gray-300">Personalized quotes from our team — no automatic fare calculator. Every trip is unique.</p>
+          <p className="text-xl text-gray-300">Personalized quotes from our team — every trip is unique.</p>
         </div>
       </section>
 
@@ -30,9 +33,11 @@ export function Pricing() {
             <CardContent className="p-8">
               <div className="flex items-center gap-3 mb-6">
                 <MessageSquare className="w-8 h-8 text-[#D4AF37]" />
-                <h2 className="text-2xl text-white" style={{ fontFamily: 'var(--font-heading)' }}>Manual Quote System</h2>
+                <h2 className="text-2xl text-white" style={{ fontFamily: 'var(--font-heading)' }}>How Quotes Work</h2>
               </div>
-              <p className="text-gray-300 mb-8">High5 Limo provides custom quotes tailored to your specific trip. Submit your booking request and our admin team will contact you with a competitive, transparent price.</p>
+              <p className="text-gray-300 mb-8">
+                {site.name} provides custom quotes tailored to your trip. Submit a booking request and our team will contact you with a transparent price.
+              </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {steps.map((step, i) => (
                   <div key={i} className="flex gap-4">
@@ -53,9 +58,9 @@ export function Pricing() {
                 Submit Booking Request <ArrowRight className="w-5 h-5 ml-2 inline" />
               </Button>
             </Link>
-            <a href={`tel:${SITE_PHONE}`}>
+            <a href={phoneHref(site.phone)}>
               <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0B0B0B] text-lg px-8 py-6 font-semibold w-full sm:w-auto">
-                <Phone className="w-5 h-5 mr-2 inline" /> {SITE_PHONE_DISPLAY}
+                <Phone className="w-5 h-5 mr-2 inline" /> {site.phone}
               </Button>
             </a>
           </div>
@@ -66,8 +71,8 @@ export function Pricing() {
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl text-white mb-12 text-center" style={{ fontFamily: 'var(--font-heading)' }}>What's <span className="text-[#D4AF37]">Included</span></h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {['Professional chauffeur', 'Fuel & vehicle maintenance', 'Insurance coverage', 'Wi-Fi connectivity', 'Climate control', 'Premium sound system', 'Bottled water', 'Phone chargers', 'Luggage assistance'].map((item, index) => (
-              <div key={index} className="flex items-center gap-3 text-white">
+            {['Professional chauffeur', 'Fuel & vehicle maintenance', 'Insurance coverage', 'Wi-Fi connectivity', 'Climate control', 'Premium sound system', 'Bottled water', 'Phone chargers', 'Luggage assistance'].map((item) => (
+              <div key={item} className="flex items-center gap-3 text-white">
                 <CheckCircle className="w-5 h-5 text-[#D4AF37] flex-shrink-0" />
                 <span>{item}</span>
               </div>

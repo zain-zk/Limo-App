@@ -1,19 +1,13 @@
 import { Link } from 'react-router';
 import { Phone, Facebook, Instagram, Twitter } from 'lucide-react';
-import { SITE_PHONE, SITE_PHONE_DISPLAY } from '../../lib/constants';
+import { useContent } from '../../context/ContentContext';
+
+function phoneHref(phone: string) {
+  return `tel:${phone.replace(/[^\d+]/g, '')}`;
+}
 
 export function Footer() {
-  const quickLinks = [
-    { label: 'Home', href: '/' },
-    { label: 'About', href: '/about' },
-    { label: 'Services', href: '/services' },
-    { label: 'Fleet', href: '/fleet' },
-    { label: 'Book Now', href: '/book' },
-    { label: 'Request Quote', href: '/pricing' },
-    { label: 'Testimonials', href: '/testimonials' },
-    { label: 'FAQ', href: '/faq' },
-    { label: 'Contact', href: '/contact' },
-  ];
+  const { site, navigation } = useContent();
 
   return (
     <footer className="bg-[#0B1F3A] text-white pt-16 pb-8">
@@ -27,16 +21,16 @@ export function Footer() {
               <div className="text-white text-sm tracking-widest">LIMO</div>
             </Link>
             <p className="text-gray-300 text-sm leading-relaxed">
-              Premium limousine service across Canada. Experience luxury, punctuality, and professionalism in every ride.
+              {site.tagline}. Experience luxury, punctuality, and professionalism in every ride.
             </p>
           </div>
 
           <div>
             <h4 className="text-[#D4AF37] mb-4" style={{ fontFamily: 'var(--font-heading)' }}>Quick Links</h4>
             <ul className="space-y-2">
-              {quickLinks.map((link) => (
-                <li key={link.label}>
-                  <Link to={link.href} className="text-gray-300 hover:text-[#D4AF37] transition-colors text-sm">{link.label}</Link>
+              {navigation.map((link) => (
+                <li key={link.path}>
+                  <Link to={link.path} className="text-gray-300 hover:text-[#D4AF37] transition-colors text-sm">{link.label}</Link>
                 </li>
               ))}
             </ul>
@@ -59,8 +53,9 @@ export function Footer() {
               <li className="flex items-start">
                 <Phone className="w-5 h-5 text-[#D4AF37] mr-3 mt-0.5 flex-shrink-0" />
                 <div>
-                  <a href={`tel:${SITE_PHONE}`} className="text-gray-300 hover:text-[#D4AF37] text-sm">{SITE_PHONE_DISPLAY}</a>
+                  <a href={phoneHref(site.phone)} className="text-gray-300 hover:text-[#D4AF37] text-sm">{site.phone}</a>
                   <p className="text-xs text-gray-400">24/7 Support</p>
+                  <a href={`mailto:${site.email}`} className="text-gray-300 hover:text-[#D4AF37] text-sm block mt-1">{site.email}</a>
                 </div>
               </li>
             </ul>
@@ -76,7 +71,7 @@ export function Footer() {
 
         <div className="pt-8 border-t border-[#D4AF37]/20">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-            <p>&copy; 2026 High5 Limo. All rights reserved.</p>
+            <p>&copy; 2026 {site.name}. All rights reserved.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-[#D4AF37] transition-colors">Terms of Service</a>

@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ContentSection {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Booking {
+  id                  String   @id @default(uuid())
+  fullName            String
+  phone               String
+  pickupAddress       String
+  dropoffAddress      String
+  date                String
+  time                String
+  passengers          String
+  luggage             String
+  serviceType         String
+  paymentMethod       String
+  flightNumber        String?
+  specialInstructions String?
+  status              String   @default("new")
+  quoteAmount           Float?
+  quoteNotes            String?
+  paymentStatus         String   @default("unpaid")
+  adminNotes            String?
+  stripeSessionId       String?
+  stripePaymentIntentId String?
+  paymentUrl            String?
+  paidAt                DateTime?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}

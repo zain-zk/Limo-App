@@ -1,54 +1,46 @@
 import { Router } from 'express';
-import { readFileSync, writeFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { prisma } from '../db.js';
+import { requireAuth } from '../middleware/auth.js';
 import { CONTENT_SECTIONS } from '../types/content.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const contentPath = join(__dirname, '../data/content.json');
-
-function readContent() {
-  const raw = readFileSync(contentPath, 'utf-8');
-  return JSON.parse(raw);
-}
-
-function writeContent(data) {
-  writeFileSync(contentPath, JSON.stringify(data, null, 2), 'utf-8');
-}
 
 const router = Router();
 
-router.get('/', (_req, res) => {
-  res.json(readContent());
+router.get('/', async (_req, res) => {
+  const sections = await prisma.contentSection.findMany();
+  const content = Object.fromEntries(sections.map((s) => [s.key, s.data]));
+  res.json(content);
 });
 
 router.get('/sections', (_req, res) => {
   res.json({ sections: CONTENT_SECTIONS });
 });
 
-router.get('/:section', (req, res) => {
-  const content = readContent();
-  const section = content[req.params.section];
+router.get('/:section', async (req, res) => {
+  const section = await prisma.contentSection.findUnique({
+    where: { key: req.params.section },
+  });
 
   if (!section) {
     return res.status(404).json({ error: `Section "${req.params.section}" not found` });
   }
 
-  res.json(section);
+  res.json(section.data);
 });
 
-router.put('/:section', (req, res) => {
+router.put('/:section', requireAuth, async (req, res) => {
   const { section } = req.params;
 
   if (!CONTENT_SECTIONS.includes(section)) {
     return res.status(400).json({ error: `Invalid section "${section}"` });
   }
 
-  const content = readContent();
-  content[section] = req.body;
-  writeContent(content);
+  const updated = await prisma.contentSection.upsert({
+    where: { key: section },
+    update: { data: req.body },
+    create: { key: section, data: req.body },
+  });
 
-  res.json({ success: true, section, data: req.body });
+  res.json({ success: true, section, data: updated.data });
 });
 
 export default router;

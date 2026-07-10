@@ -5,6 +5,7 @@ dist/
 node/src/data/content.json.bak
 node/src/data/bookings.json
 node/src/data/contact-messages.json
+node/.env
 
 # Local docs / notes (not part of the app)
 docs/

@@ -1,15 +1,8 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { useContext, useEffect, useState, type ReactNode } from 'react';
 import { fetchContent } from '../lib/api';
+import { DEFAULT_ABOUT, DEFAULT_FAQ, DEFAULT_HOME, DEFAULT_NAVIGATION, DEFAULT_SITE } from '../lib/defaults';
 import type { CmsContent } from '../types/content';
-
-interface ContentContextValue {
-  content: CmsContent | null;
-  loading: boolean;
-  error: string | null;
-  refresh: () => Promise<void>;
-}
-
-const ContentContext = createContext<ContentContextValue | undefined>(undefined);
+import { ContentContext, type ContentContextValue } from './content-context';
 
 export function ContentProvider({ children }: { children: ReactNode }) {
   const [content, setContent] = useState<CmsContent | null>(null);
@@ -33,8 +26,20 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     loadContent();
   }, []);
 
+  const value: ContentContextValue = {
+    content,
+    loading,
+    error,
+    refresh: loadContent,
+    site: content?.site ?? DEFAULT_SITE,
+    home: content?.home ?? DEFAULT_HOME,
+    navigation: content?.navigation ?? DEFAULT_NAVIGATION,
+    about: content?.about ?? DEFAULT_ABOUT,
+    faq: content?.faq ?? DEFAULT_FAQ,
+  };
+
   return (
-    <ContentContext.Provider value={{ content, loading, error, refresh: loadContent }}>
+    <ContentContext.Provider value={value}>
       {children}
     </ContentContext.Provider>
   );

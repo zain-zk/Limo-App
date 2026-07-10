@@ -182,7 +182,7 @@ export function BookNow() {
                         <input type="radio" name="paymentMethod" value="online" checked={formData.paymentMethod === 'online'} onChange={handleChange} className="mt-1" />
                         <div>
                           <div className="flex items-center gap-2 text-white font-semibold"><CreditCard className="w-5 h-5 text-[#D4AF37]" /> Pay Online</div>
-                          <p className="text-gray-400 text-sm mt-1">Pay securely via Stripe when your quote is confirmed.</p>
+                          <p className="text-gray-400 text-sm mt-1">After we send your quote, you'll get a secure Stripe payment link to pay by card.</p>
                         </div>
                       </label>
                       <label className={`flex items-start gap-4 p-4 rounded-lg border cursor-pointer transition-all ${formData.paymentMethod === 'driver' ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#D4AF37]/20 bg-[#0B0B0B]'}`}>

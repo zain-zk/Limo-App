@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: limo-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: limo
+      POSTGRES_PASSWORD: limo_dev_password
+      POSTGRES_DB: limo_app
+    volumes:
+      - limo_pg_data:/var/lib/postgresql/data
+
+volumes:
+  limo_pg_data:

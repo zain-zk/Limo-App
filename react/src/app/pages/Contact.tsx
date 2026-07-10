@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { Phone, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Phone, Send, CheckCircle, AlertCircle, Mail, MapPin } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { Card, CardContent } from '../components/ui/card';
-import { SITE_PHONE, SITE_PHONE_DISPLAY } from '../../lib/constants';
 import { submitContact } from '../../lib/api';
+import { useContent } from '../../context/ContentContext';
+import { phoneHref } from '../../lib/phone';
 
 export function Contact() {
+  const { site } = useContent();
   const [formData, setFormData] = useState({ name: '', phone: '', message: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -48,6 +50,8 @@ export function Contact() {
     }
   };
 
+  const address = `${site.address.street}, ${site.address.city}, ${site.address.province} ${site.address.postal}`;
+
   return (
     <div className="min-h-screen pt-20 bg-[#0B0B0B]">
       <section className="py-20 bg-gradient-to-br from-[#0B0B0B] via-[#0B1F3A] to-[#0B0B0B]">
@@ -63,19 +67,33 @@ export function Contact() {
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Phone className="w-8 h-8 text-[#D4AF37]" />
-                </div>
-                <h3 className="text-2xl text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>Phone</h3>
-                <a href={`tel:${SITE_PHONE}`} className="text-2xl text-[#D4AF37] hover:underline block mb-4">{SITE_PHONE_DISPLAY}</a>
-                <p className="text-gray-400 mb-6">Available 24/7, every day of the year</p>
-                <a href={`tel:${SITE_PHONE}`}>
-                  <Button className="w-full bg-[#D4AF37] text-[#0B0B0B] hover:bg-[#D4AF37]/90 text-lg py-6 font-semibold">Call Now</Button>
-                </a>
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
+                <CardContent className="p-8 text-center">
+                  <div className="w-16 h-16 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Phone className="w-8 h-8 text-[#D4AF37]" />
+                  </div>
+                  <h3 className="text-2xl text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>Phone</h3>
+                  <a href={phoneHref(site.phone)} className="text-2xl text-[#D4AF37] hover:underline block mb-4">{site.phone}</a>
+                  <p className="text-gray-400 mb-6">Available 24/7</p>
+                  <a href={phoneHref(site.phone)}>
+                    <Button className="w-full bg-[#D4AF37] text-[#0B0B0B] hover:bg-[#D4AF37]/90 text-lg py-6 font-semibold">Call Now</Button>
+                  </a>
+                </CardContent>
+              </Card>
+              <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
+                <CardContent className="p-6 space-y-3">
+                  <div className="flex items-center gap-3 text-gray-300">
+                    <Mail className="w-5 h-5 text-[#D4AF37]" />
+                    <a href={`mailto:${site.email}`} className="hover:text-[#D4AF37]">{site.email}</a>
+                  </div>
+                  <div className="flex items-start gap-3 text-gray-300">
+                    <MapPin className="w-5 h-5 text-[#D4AF37] mt-0.5" />
+                    <span>{address}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
             <div>
               {submitted ? (

@@ -68,15 +68,44 @@ export interface NavItem {
   path: string;
 }
 
+export interface AboutContent {
+  heroTitle: string;
+  heroHighlight: string;
+  heroSubtitle: string;
+  storyTitle: string;
+  storyHighlight: string;
+  storyParagraphs: string[];
+  yearsLabel: string;
+  yearsValue: string;
+  focusAreas: ContentItem[];
+  values: ContentItem[];
+  whyChooseUs: Array<{ title: string; description: string }>;
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface FaqContent {
+  heroTitle: string;
+  heroHighlight: string;
+  heroSubtitle: string;
+  items: FaqItem[];
+  ctaTitle: string;
+  ctaHighlight: string;
+  ctaSubtitle: string;
+}
+
 export interface CmsContent {
   site: SiteContent;
   home: HomeContent;
   navigation: NavItem[];
-  about?: Record<string, unknown>;
+  about: AboutContent;
+  faq: FaqContent;
   services?: Record<string, unknown>;
   fleet?: Record<string, unknown>;
   pricing?: Record<string, unknown>;
   testimonials?: Record<string, unknown>;
-  faq?: Record<string, unknown>;
   contact?: Record<string, unknown>;
 }
