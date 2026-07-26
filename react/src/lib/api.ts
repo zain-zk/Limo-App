@@ -91,9 +91,71 @@ export async function updateSection<T extends keyof CmsContent>(
   return result.data;
 }
 
+export interface Vehicle {
+  id: string;
+  name: string;
+  slug: string;
+  passengers: number;
+  luggage: number;
+  features: string[];
+  imageUrl?: string | null;
+  active: boolean;
+  sortOrder: number;
+}
+
+export interface BlogPostSummary {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt?: string | null;
+  publishedAt?: string | null;
+  seoTitle?: string | null;
+  seoDesc?: string | null;
+}
+
+export interface BlogPost extends BlogPostSummary {
+  body: string;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminStats {
+  totalBookings: number;
+  totalMessages: number;
+  revenue: number;
+  statusCounts: Record<string, number>;
+  recentBookings: Array<{
+    id: string;
+    fullName: string;
+    status: string;
+    date: string;
+    quoteAmount?: number | null;
+    createdAt: string;
+  }>;
+}
+
+export interface BookingStatusResult {
+  id: string;
+  status: string;
+  paymentStatus: string;
+  date: string;
+  time: string;
+  pickupAddress: string;
+  dropoffAddress: string;
+  serviceType: string;
+  vehicleSelection?: string | null;
+  quoteAmount?: number | null;
+  quoteNotes?: string | null;
+  paymentUrl?: string | null;
+  paidAt?: string | null;
+}
+
 export interface BookingPayload {
   fullName: string;
+  email: string;
   phone: string;
+  preferredContactMethod: 'email' | 'phone';
   pickupAddress: string;
   dropoffAddress: string;
   date: string;
@@ -101,9 +163,11 @@ export interface BookingPayload {
   passengers: string;
   luggage: string;
   serviceType: string;
+  vehicleSelection?: string;
   paymentMethod: 'online' | 'driver';
   flightNumber?: string;
   specialInstructions?: string;
+  turnstileToken?: string;
 }
 
 export interface Booking extends BookingPayload {
@@ -150,6 +214,8 @@ export async function updateBooking(
     quoteAmount?: number | null;
     quoteNotes?: string | null;
     adminNotes?: string | null;
+    sendQuoteEmail?: boolean;
+    autoPaymentLink?: boolean;
   },
 ) {
   const response = await authFetch(`${API_BASE}/bookings/${id}`, {
@@ -199,7 +265,12 @@ export async function fetchPaymentSession(sessionId: string) {
   }>;
 }
 
-export async function submitContact(data: { name: string; phone: string; message: string }) {
+export async function submitContact(data: {
+  name: string;
+  phone: string;
+  message: string;
+  turnstileToken?: string;
+}) {
   const response = await fetch(`${API_BASE}/contact`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -217,5 +288,125 @@ export async function submitContact(data: { name: string; phone: string; message
 export async function fetchContactMessages() {
   const response = await authFetch(`${API_BASE}/contact`);
   if (!response.ok) throw new Error('Failed to load messages');
+  return response.json();
+}
+
+export async function fetchVehicles(): Promise<Vehicle[]> {
+  const response = await fetch(`${API_BASE}/vehicles`);
+  if (!response.ok) throw new Error('Failed to load vehicles');
+  return response.json();
+}
+
+export async function fetchAllVehicles(): Promise<Vehicle[]> {
+  const response = await authFetch(`${API_BASE}/vehicles/all`);
+  if (!response.ok) throw new Error('Failed to load vehicles');
+  return response.json();
+}
+
+export async function createVehicle(data: Partial<Vehicle> & { name: string }) {
+  const response = await authFetch(`${API_BASE}/vehicles`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to create vehicle');
+  }
+  return response.json();
+}
+
+export async function updateVehicle(id: string, data: Partial<Vehicle>) {
+  const response = await authFetch(`${API_BASE}/vehicles/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error('Failed to update vehicle');
+  return response.json();
+}
+
+export async function deleteVehicle(id: string) {
+  const response = await authFetch(`${API_BASE}/vehicles/${id}`, { method: 'DELETE' });
+  if (!response.ok) throw new Error('Failed to delete vehicle');
+  return response.json();
+}
+
+export async function fetchBlogPosts(): Promise<BlogPostSummary[]> {
+  const response = await fetch(`${API_BASE}/blog`);
+  if (!response.ok) throw new Error('Failed to load blog posts');
+  return response.json();
+}
+
+export async function fetchBlogPost(slug: string): Promise<BlogPost> {
+  const response = await fetch(`${API_BASE}/blog/${slug}`);
+  if (!response.ok) throw new Error('Post not found');
+  return response.json();
+}
+
+export async function fetchAllBlogPosts(): Promise<BlogPost[]> {
+  const response = await authFetch(`${API_BASE}/blog/admin/all`);
+  if (!response.ok) throw new Error('Failed to load blog posts');
+  return response.json();
+}
+
+export async function createBlogPost(data: {
+  title: string;
+  body: string;
+  slug?: string;
+  excerpt?: string;
+  published?: boolean;
+  seoTitle?: string;
+  seoDesc?: string;
+}) {
+  const response = await authFetch(`${API_BASE}/blog`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to create post');
+  }
+  return response.json();
+}
+
+export async function updateBlogPost(id: string, data: Partial<BlogPost>) {
+  const response = await authFetch(`${API_BASE}/blog/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error('Failed to update post');
+  return response.json();
+}
+
+export async function deleteBlogPost(id: string) {
+  const response = await authFetch(`${API_BASE}/blog/${id}`, { method: 'DELETE' });
+  if (!response.ok) throw new Error('Failed to delete post');
+  return response.json();
+}
+
+export async function fetchAdminStats(): Promise<AdminStats> {
+  const response = await authFetch(`${API_BASE}/admin/stats`);
+  if (!response.ok) throw new Error('Failed to load stats');
+  return response.json();
+}
+
+export async function downloadBookingsReport(from?: string, to?: string) {
+  const params = new URLSearchParams();
+  if (from) params.set('from', from);
+  if (to) params.set('to', to);
+  const response = await authFetch(`${API_BASE}/admin/reports/bookings?${params}`);
+  if (!response.ok) throw new Error('Failed to download report');
+  return response.blob();
+}
+
+export async function lookupBookingStatus(id: string, email: string): Promise<BookingStatusResult> {
+  const response = await fetch(`${API_BASE}/booking-status`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, email }),
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || 'Booking not found');
+  }
   return response.json();
 }

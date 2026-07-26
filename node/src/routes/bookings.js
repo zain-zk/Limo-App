@@ -2,17 +2,13 @@ import { Router } from 'express';
 import { prisma } from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
 import { sendBookingSms } from '../services/sms.js';
+import { sendBookingAckEmail, sendQuoteEmail } from '../services/email.js';
+import { verifyTurnstile } from '../services/turnstile.js';
+import { bookingCreateSchema, parseSchema } from '../validation/schemas.js';
+import { createCheckoutForBooking } from '../services/payments.js';
 
 const STATUSES = ['new', 'pending_quote', 'confirmed', 'completed', 'cancelled'];
 const PAYMENT_STATUSES = ['unpaid', 'pending', 'paid', 'refunded', 'pay_driver'];
-
-function validateBooking(body) {
-  const required = [
-    'fullName', 'phone', 'pickupAddress', 'dropoffAddress',
-    'date', 'time', 'passengers', 'luggage', 'serviceType', 'paymentMethod',
-  ];
-  return required.filter((field) => !body[field]?.toString().trim());
-}
 
 const router = Router();
 
@@ -28,42 +24,55 @@ router.get('/:id', requireAuth, async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const missing = validateBooking(req.body);
-  if (missing.length) {
-    return res.status(400).json({ error: 'Missing required fields', fields: missing });
+  const parsed = parseSchema(bookingCreateSchema, req.body);
+  if (!parsed.ok) {
+    return res.status(400).json({ error: parsed.error, fields: parsed.fields });
   }
 
-  const paymentMethod = req.body.paymentMethod === 'online' ? 'online' : 'driver';
+  const captcha = await verifyTurnstile(parsed.data.turnstileToken, req.ip);
+  if (!captcha.success) {
+    return res.status(400).json({ error: captcha.error || 'CAPTCHA verification failed' });
+  }
+
+  const paymentMethod = parsed.data.paymentMethod === 'online' ? 'online' : 'driver';
 
   const booking = await prisma.booking.create({
     data: {
-      fullName: req.body.fullName.trim(),
-      phone: req.body.phone.trim(),
-      pickupAddress: req.body.pickupAddress.trim(),
-      dropoffAddress: req.body.dropoffAddress.trim(),
-      date: req.body.date,
-      time: req.body.time,
-      passengers: req.body.passengers.toString(),
-      luggage: req.body.luggage.toString(),
-      serviceType: req.body.serviceType,
+      fullName: parsed.data.fullName,
+      email: parsed.data.email,
+      phone: parsed.data.phone,
+      preferredContactMethod: parsed.data.preferredContactMethod,
+      pickupAddress: parsed.data.pickupAddress,
+      dropoffAddress: parsed.data.dropoffAddress,
+      date: parsed.data.date,
+      time: parsed.data.time,
+      passengers: parsed.data.passengers,
+      luggage: parsed.data.luggage,
+      serviceType: parsed.data.serviceType,
+      vehicleSelection: parsed.data.vehicleSelection || null,
       paymentMethod,
-      flightNumber: req.body.flightNumber?.trim() || null,
-      specialInstructions: req.body.specialInstructions?.trim() || null,
-      status: 'new',
+      flightNumber: parsed.data.flightNumber || null,
+      specialInstructions: parsed.data.specialInstructions || null,
+      status: 'pending_quote',
       paymentStatus: paymentMethod === 'driver' ? 'pay_driver' : 'unpaid',
     },
   });
 
+  const notifications = { sms: null, email: null };
+
   try {
-    const sms = await sendBookingSms(booking);
-    res.status(201).json({ success: true, booking, sms });
+    notifications.sms = await sendBookingSms(booking);
   } catch (err) {
-    res.status(201).json({
-      success: true,
-      booking,
-      sms: { sent: false, error: err.message },
-    });
+    notifications.sms = { sent: false, error: err.message };
   }
+
+  try {
+    notifications.email = await sendBookingAckEmail(booking);
+  } catch (err) {
+    notifications.email = { sent: false, error: err.message };
+  }
+
+  res.status(201).json({ success: true, booking, notifications });
 });
 
 router.patch('/:id', requireAuth, async (req, res) => {
@@ -84,6 +93,7 @@ router.patch('/:id', requireAuth, async (req, res) => {
   if (req.body.paymentStatus) data.paymentStatus = req.body.paymentStatus;
   if (req.body.fullName) data.fullName = req.body.fullName;
   if (req.body.phone) data.phone = req.body.phone;
+  if (req.body.email) data.email = req.body.email;
   if (req.body.adminNotes !== undefined) data.adminNotes = req.body.adminNotes;
   if (req.body.quoteNotes !== undefined) data.quoteNotes = req.body.quoteNotes;
 
@@ -93,15 +103,38 @@ router.patch('/:id', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'Invalid quote amount' });
     }
     data.quoteAmount = amount;
-    if (!req.body.status && existing.status === 'new') {
+    if (!req.body.status && (existing.status === 'new' || existing.status === 'pending_quote')) {
       data.status = 'pending_quote';
     }
   }
 
-  const booking = await prisma.booking.update({
+  let booking = await prisma.booking.update({
     where: { id: req.params.id },
     data,
   });
+
+  const sendQuoteNotification = req.body.sendQuoteEmail === true;
+  const autoPaymentLink = req.body.autoPaymentLink === true;
+
+  if (sendQuoteNotification && booking.quoteAmount && booking.quoteAmount > 0) {
+    let paymentUrl = booking.paymentUrl;
+
+    if (autoPaymentLink && booking.paymentMethod === 'online' && booking.paymentStatus !== 'paid') {
+      try {
+        const checkout = await createCheckoutForBooking(booking);
+        booking = checkout.booking;
+        paymentUrl = checkout.url;
+      } catch (err) {
+        console.error('[Booking] Auto payment link failed:', err.message);
+      }
+    }
+
+    try {
+      await sendQuoteEmail(booking, paymentUrl);
+    } catch (err) {
+      console.error('[Booking] Quote email failed:', err.message);
+    }
+  }
 
   res.json({ success: true, booking });
 });

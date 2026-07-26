@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import {
   LogOut, Save, RefreshCw, LayoutDashboard, Settings, Home, Menu,
   Calendar, MessageSquare, Loader2, Info, HelpCircle, Plus, Trash2, Link2, Copy,
+  Car, FileText, Scale,
 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 import { Button } from '../components/ui/button';
@@ -18,7 +19,8 @@ import {
   type Booking,
 } from '../../lib/api';
 import type { SiteContent, HomeContent, NavItem, AboutContent, FaqContent } from '../../types/content';
-import { DEFAULT_ABOUT, DEFAULT_FAQ, DEFAULT_HOME, DEFAULT_NAVIGATION, DEFAULT_SITE } from '../../lib/defaults';
+import { DEFAULT_ABOUT, DEFAULT_FAQ, DEFAULT_HOME, DEFAULT_NAVIGATION, DEFAULT_SITE, DEFAULT_LEGAL } from '../../lib/defaults';
+import { DashboardPanel, VehiclesPanel, BlogPanel, LegalForm } from './admin/AdminPanels';
 
 function AdminLogin({ onSuccess }: { onSuccess: (username: string) => void }) {
   const [username, setUsername] = useState('');
@@ -97,6 +99,10 @@ function SiteSettingsForm({ initial, onSaved }: { initial: SiteContent; onSaved:
         <div><Label className="text-white">Phone</Label><Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="mt-1 bg-[#0B0B0B] border-[#D4AF37]/20 text-white" /></div>
         <div><Label className="text-white">Email</Label><Input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="mt-1 bg-[#0B0B0B] border-[#D4AF37]/20 text-white" /></div>
         <div><Label className="text-white">WhatsApp Number</Label><Input value={form.whatsapp} onChange={(e) => setForm({ ...form, whatsapp: e.target.value })} className="mt-1 bg-[#0B0B0B] border-[#D4AF37]/20 text-white" placeholder="digits only, e.g. 1234567890" /></div>
+        <div className="flex items-center gap-4 md:col-span-2">
+          <label className="flex items-center gap-2 text-white text-sm"><input type="checkbox" checked={form.showPhone !== false} onChange={(e) => setForm({ ...form, showPhone: e.target.checked })} /> Show phone on site</label>
+          <label className="flex items-center gap-2 text-white text-sm"><input type="checkbox" checked={form.showAddress === true} onChange={(e) => setForm({ ...form, showAddress: e.target.checked })} /> Show address on site</label>
+        </div>
       </div>
       <div>
         <h3 className="text-[#D4AF37] mb-3 font-medium">Address</h3>
@@ -246,6 +252,8 @@ function BookingCard({ booking, onUpdated }: { booking: Booking; onUpdated: () =
   const [quoteAmount, setQuoteAmount] = useState(booking.quoteAmount?.toString() ?? '');
   const [quoteNotes, setQuoteNotes] = useState(booking.quoteNotes ?? '');
   const [adminNotes, setAdminNotes] = useState(booking.adminNotes ?? '');
+  const [sendQuoteEmail, setSendQuoteEmail] = useState(false);
+  const [autoPaymentLink, setAutoPaymentLink] = useState(false);
   const [saving, setSaving] = useState(false);
   const [creatingLink, setCreatingLink] = useState(false);
   const [paymentUrl, setPaymentUrl] = useState(booking.paymentUrl ?? '');
@@ -258,6 +266,8 @@ function BookingCard({ booking, onUpdated }: { booking: Booking; onUpdated: () =
         quoteNotes,
         adminNotes,
         status: booking.status === 'new' ? 'pending_quote' : booking.status,
+        sendQuoteEmail,
+        autoPaymentLink: sendQuoteEmail && autoPaymentLink,
       });
       toast.success('Quote saved');
       onUpdated();
@@ -318,10 +328,12 @@ function BookingCard({ booking, onUpdated }: { booking: Booking; onUpdated: () =
         <div className="flex flex-wrap justify-between gap-2">
           <div>
             <p className="text-white font-medium">{booking.fullName} · {booking.phone}</p>
+            {booking.email && <p className="text-gray-400 text-sm">{booking.email} · prefers {booking.preferredContactMethod || 'phone'}</p>}
             <p className="text-gray-400 text-sm">{booking.date} at {booking.time} · {booking.serviceType}</p>
             <p className="text-gray-300 text-sm mt-1">{booking.pickupAddress} → {booking.dropoffAddress}</p>
             <p className="text-gray-500 text-xs mt-1">
               {booking.passengers} pax · {booking.luggage} bags · prefers {booking.paymentMethod}
+              {booking.vehicleSelection ? ` · ${booking.vehicleSelection}` : ''}
               {booking.flightNumber ? ` · flight ${booking.flightNumber}` : ''}
             </p>
             {booking.specialInstructions && (
@@ -414,6 +426,19 @@ function BookingCard({ booking, onUpdated }: { booking: Booking; onUpdated: () =
             </Button>
           </div>
         )}
+
+        <div className="flex flex-wrap gap-4 text-sm pt-2">
+          <label className="flex items-center gap-2 text-gray-300">
+            <input type="checkbox" checked={sendQuoteEmail} onChange={(e) => setSendQuoteEmail(e.target.checked)} />
+            Email quote to customer on save
+          </label>
+          {sendQuoteEmail && booking.paymentMethod === 'online' && (
+            <label className="flex items-center gap-2 text-gray-300">
+              <input type="checkbox" checked={autoPaymentLink} onChange={(e) => setAutoPaymentLink(e.target.checked)} />
+              Include Stripe payment link
+            </label>
+          )}
+        </div>
 
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-gray-500 text-xs">{new Date(booking.createdAt).toLocaleString()}</p>
@@ -704,7 +729,7 @@ function MessagesPanel() {
 }
 
 function AdminDashboard({ username, onLogout }: { username: string; onLogout: () => void }) {
-  const { site, home, navigation, about, faq, refresh } = useContent();
+  const { site, home, navigation, about, faq, content, refresh } = useContent();
 
   return (
     <div className="min-h-screen bg-[#0F0F0F]">
@@ -730,16 +755,22 @@ function AdminDashboard({ username, onLogout }: { username: string; onLogout: ()
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-8">
-        <Tabs defaultValue="site">
+        <Tabs defaultValue="dashboard">
           <TabsList className="bg-[#1A1A1A] border border-[#D4AF37]/20 mb-6 flex flex-wrap h-auto gap-1">
+            <TabsTrigger value="dashboard" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><LayoutDashboard className="w-4 h-4 mr-1" /> Dashboard</TabsTrigger>
             <TabsTrigger value="site" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><Settings className="w-4 h-4 mr-1" /> Site</TabsTrigger>
             <TabsTrigger value="home" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><Home className="w-4 h-4 mr-1" /> Home</TabsTrigger>
             <TabsTrigger value="about" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><Info className="w-4 h-4 mr-1" /> About</TabsTrigger>
             <TabsTrigger value="faq" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><HelpCircle className="w-4 h-4 mr-1" /> FAQ</TabsTrigger>
             <TabsTrigger value="navigation" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><Menu className="w-4 h-4 mr-1" /> Navigation</TabsTrigger>
+            <TabsTrigger value="legal" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><Scale className="w-4 h-4 mr-1" /> Legal</TabsTrigger>
+            <TabsTrigger value="vehicles" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><Car className="w-4 h-4 mr-1" /> Vehicles</TabsTrigger>
+            <TabsTrigger value="blog" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><FileText className="w-4 h-4 mr-1" /> Blog</TabsTrigger>
             <TabsTrigger value="bookings" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><Calendar className="w-4 h-4 mr-1" /> Bookings</TabsTrigger>
             <TabsTrigger value="messages" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0B0B0B]"><MessageSquare className="w-4 h-4 mr-1" /> Messages</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="dashboard"><DashboardPanel /></TabsContent>
 
           <TabsContent value="site">
             <Card className="bg-[#1A1A1A] border-[#D4AF37]/20"><CardContent className="p-6">
@@ -770,6 +801,15 @@ function AdminDashboard({ username, onLogout }: { username: string; onLogout: ()
               <NavigationForm initial={navigation ?? DEFAULT_NAVIGATION} onSaved={refresh} />
             </CardContent></Card>
           </TabsContent>
+
+          <TabsContent value="legal">
+            <Card className="bg-[#1A1A1A] border-[#D4AF37]/20"><CardContent className="p-6">
+              <LegalForm initial={content?.legal ?? DEFAULT_LEGAL} onSaved={refresh} />
+            </CardContent></Card>
+          </TabsContent>
+
+          <TabsContent value="vehicles"><VehiclesPanel /></TabsContent>
+          <TabsContent value="blog"><BlogPanel /></TabsContent>
 
           <TabsContent value="bookings"><BookingsPanel /></TabsContent>
           <TabsContent value="messages"><MessagesPanel /></TabsContent>

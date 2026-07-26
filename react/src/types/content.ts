@@ -4,12 +4,19 @@ export interface SiteContent {
   phone: string;
   email: string;
   whatsapp: string;
+  showPhone?: boolean;
+  showAddress?: boolean;
   address: {
     street: string;
     city: string;
     province: string;
     postal: string;
     country: string;
+  };
+  seo?: {
+    defaultTitle: string;
+    defaultDescription: string;
+    siteUrl: string;
   };
 }
 
@@ -35,6 +42,7 @@ export interface FleetItem {
   passengers: number;
   luggage: number;
   features: string[];
+  image?: string;
 }
 
 export interface TestimonialItem {
@@ -97,12 +105,20 @@ export interface FaqContent {
   ctaSubtitle: string;
 }
 
+export interface LegalContent {
+  privacyTitle: string;
+  privacyBody: string;
+  termsTitle: string;
+  termsBody: string;
+}
+
 export interface CmsContent {
   site: SiteContent;
   home: HomeContent;
   navigation: NavItem[];
   about: AboutContent;
   faq: FaqContent;
+  legal?: LegalContent;
   services?: Record<string, unknown>;
   fleet?: Record<string, unknown>;
   pricing?: Record<string, unknown>;

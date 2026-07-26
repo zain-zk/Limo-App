@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "bookNow": "Book Now",
+    "blog": "Blog",
+    "bookingStatus": "Booking Status"
+  },
+  "book": {
+    "title": "Book Your",
+    "titleHighlight": "Luxury Ride",
+    "subtitle": "Submit your request and our team will contact you with a personalized quote.",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "preferredContact": "Preferred Contact Method",
+    "contactEmail": "Email",
+    "contactPhone": "Phone",
+    "vehicle": "Preferred Vehicle",
+    "selectVehicle": "Select a vehicle (optional)",
+    "submit": "Submit Booking Request",
+    "success": "Booking Request Sent!",
+    "successMessage": "Thank you for choosing High5 Limo. Our team will review your request and contact you shortly with a quote.",
+    "trackBooking": "Track your booking status",
+    "bookingIdNote": "Save your booking ID from your confirmation email to check status anytime."
+  },
+  "bookingStatus": {
+    "title": "Check Booking Status",
+    "subtitle": "Enter your booking ID and email to view your trip status and quote.",
+    "bookingId": "Booking ID",
+    "email": "Email Address",
+    "lookup": "Look Up Booking",
+    "notFound": "Booking not found. Check your booking ID and email."
+  },
+  "common": {
+    "loading": "Loading...",
+    "required": "Required"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français"
+  }
+}

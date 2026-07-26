@@ -189,4 +189,41 @@
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
   }
+
+  select.form-select {
+    @apply w-full h-10 px-3 rounded-md bg-[#0B0B0B] border border-[#D4AF37]/20 text-white;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2.5rem;
+  }
+
+  select.form-select:focus {
+    outline: none;
+    border-color: rgba(212, 175, 55, 0.5);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
+  }
+
+  .legal-content h2 {
+    color: #D4AF37;
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .legal-content p {
+    color: #d1d5db;
+    line-height: 1.75;
+    margin-bottom: 1rem;
+  }
+
+  .legal-content ul {
+    color: #d1d5db;
+    margin-left: 1.25rem;
+    margin-bottom: 1rem;
+    list-style: disc;
+  }
 }

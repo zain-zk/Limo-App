@@ -3,6 +3,8 @@ import { Plus, Minus } from 'lucide-react';
 import { Link } from 'react-router';
 import { useContent } from '../../context/ContentContext';
 import { phoneHref } from '../../lib/phone';
+import { PageHero } from '../../components/PageHero';
+import { Seo } from '../../components/Seo';
 
 export function FAQ() {
   const { faq, site } = useContent();
@@ -14,21 +16,14 @@ export function FAQ() {
 
   return (
     <div className="min-h-screen pt-20 bg-[#0F0F0F]">
-      <section className="py-20 bg-gradient-to-br from-[#0F0F0F] via-[#0B1F3A] to-[#0F0F0F]">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-6xl text-white mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
-            {faq.heroTitle} <span className="text-[#D4AF37]">{faq.heroHighlight}</span>
-          </h1>
-          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-8"></div>
-          <p className="text-xl text-gray-300 leading-relaxed">{faq.heroSubtitle}</p>
-        </div>
-      </section>
+      <Seo title="FAQ | High5 Limo" description="Answers to common questions about bookings, quotes, payments, and our services." path="/faq" />
+      <PageHero title={faq.heroTitle} titleHighlight={faq.heroHighlight} subtitle={faq.heroSubtitle} />
 
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4">
           <div className="space-y-4">
             {faq.items.map((item, index) => (
-              <div key={index} className="bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-lg overflow-hidden">
+              <div key={index} className={`bg-[#1A1A1A] border rounded-lg overflow-hidden transition-colors ${openIndex === index ? 'border-[#D4AF37]/50' : 'border-[#D4AF37]/15 hover:border-[#D4AF37]/40'}`}>
                 <button
                   onClick={() => toggleAccordion(index)}
                   className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-[#2A2A2A] transition-colors"

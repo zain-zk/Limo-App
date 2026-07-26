@@ -2,7 +2,7 @@ import {
   Award, Briefcase, Car, Clock, DollarSign, Heart, MapPin,
   PartyPopper, Plane, Shield, Star, Timer, Users,
 } from 'lucide-react';
-import type { AboutContent, FaqContent, HomeContent, SiteContent, NavItem } from '../types/content';
+import type { AboutContent, FaqContent, HomeContent, LegalContent, SiteContent, NavItem } from '../types/content';
 
 export const DEFAULT_SITE: SiteContent = {
   name: 'High5 Limo',
@@ -10,12 +10,19 @@ export const DEFAULT_SITE: SiteContent = {
   phone: '+1 (234) 567-890',
   email: 'info@high5limo.com',
   whatsapp: '1234567890',
+  showPhone: true,
+  showAddress: false,
   address: {
     street: '123 Luxury Lane',
     city: 'Toronto',
     province: 'ON',
     postal: 'M5H 2N2',
     country: 'Canada',
+  },
+  seo: {
+    defaultTitle: 'High5 Limo | Premium Limousine Service Across Canada',
+    defaultDescription: 'Luxury limousine and chauffeur service for airport transfers, weddings, corporate travel, and special events across Canada.',
+    siteUrl: 'https://high5limo.ca',
   },
 };
 
@@ -24,10 +31,9 @@ export const DEFAULT_NAVIGATION: NavItem[] = [
   { label: 'About', path: '/about' },
   { label: 'Services', path: '/services' },
   { label: 'Fleet', path: '/fleet' },
-  { label: 'Book Now', path: '/book' },
   { label: 'Pricing', path: '/pricing' },
-  { label: 'Testimonials', path: '/testimonials' },
   { label: 'FAQ', path: '/faq' },
+  { label: 'Blog', path: '/blog' },
   { label: 'Contact', path: '/contact' },
 ];
 
@@ -64,9 +70,9 @@ export const DEFAULT_HOME: HomeContent = {
     { icon: 'Star', title: 'On-Time Guarantee', description: 'Punctual every ride' },
   ],
   fleet: [
-    { name: 'GMC Yukon XL', passengers: 6, luggage: 6, features: ['Wi-Fi', 'Leather Seats', 'Climate Control', 'Premium Sound'] },
-    { name: 'GMC Yukon Denali', passengers: 6, luggage: 5, features: ['Wi-Fi', 'Heated Seats', 'Panoramic Roof', 'Entertainment System'] },
-    { name: 'Cadillac Escalade', passengers: 7, luggage: 7, features: ['Wi-Fi', 'Premium Interior', 'Advanced Safety', 'Luxury Comfort'] },
+    { name: 'GMC Yukon XL', passengers: 6, luggage: 6, features: ['Wi-Fi', 'Leather Seats', 'Climate Control', 'Premium Sound'], image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80' },
+    { name: 'GMC Yukon Denali', passengers: 6, luggage: 5, features: ['Wi-Fi', 'Heated Seats', 'Panoramic Roof', 'Entertainment System'], image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80' },
+    { name: 'Cadillac Escalade', passengers: 7, luggage: 7, features: ['Wi-Fi', 'Premium Interior', 'Advanced Safety', 'Luxury Comfort'], image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&q=80' },
   ],
   testimonials: [
     { name: 'Sarah Johnson', role: 'Corporate Executive', rating: 5, text: 'Exceptional service! The driver was professional, punctual, and the vehicle was pristine. High5 Limo made my airport transfer seamless.' },
@@ -135,6 +141,13 @@ export const DEFAULT_FAQ: FaqContent = {
   ctaTitle: 'Still Have',
   ctaHighlight: 'Questions?',
   ctaSubtitle: "Our team is here to help! Contact us anytime, and we'll be happy to assist you.",
+};
+
+export const DEFAULT_LEGAL: LegalContent = {
+  privacyTitle: 'Privacy Policy',
+  privacyBody: '<p>High5 Limo respects your privacy. Contact info@high5limo.com for inquiries.</p>',
+  termsTitle: 'Terms of Service',
+  termsBody: '<p>By using High5 Limo services you agree to our booking and payment terms.</p>',
 };
 
 // Keep lucide references so tree-shaking doesn't drop icons used only via strings

@@ -2,13 +2,18 @@
 
 Monorepo with separate frontend and backend for the public website and admin CMS.
 
+Full technical specification: **[docs/High5Limo_Implementation_Plan.md](docs/High5Limo_Implementation_Plan.md)**
+
 ## Structure
 
 ```
 Limo-App/
 ├── react/              # Public website + admin UI (Vite + React)
 ├── node/               # CMS API (Express + Prisma + PostgreSQL)
+├── docs/               # Implementation plan & BRD traceability
 ├── docker-compose.yml  # Local PostgreSQL
+├── render.yaml         # Render deployment blueprint
+├── vercel.json         # Vercel frontend config
 └── package.json        # Root scripts to run both apps
 ```
 
@@ -20,100 +25,52 @@ Limo-App/
 ## First-time setup
 
 ```bash
-# 1. Install dependencies
 npm run install:all
-
-# 2. Start PostgreSQL
 docker compose up -d
-
-# 3. Configure backend env
 cp node/.env.example node/.env
-
-# 4. Install node deps, generate Prisma client, push schema & seed
-cd node
-npm install
-npm run db:setup
-cd ..
+cd node && npm run db:setup && cd ..
 ```
+
+Optional frontend env: `cp react/.env.example react/.env.local`
 
 ## Run locally
 
 ```bash
-# React (port 5173) + Node API (port 3001)
-npm run dev
+npm run dev   # React :5173 + API :3001
 ```
 
-Or run separately:
+- **Site:** http://localhost:5173  
+- **Admin:** http://localhost:5173/admin (`admin` / `admin123`)  
+- **Booking status:** http://localhost:5173/booking/status
 
-```bash
-npm run dev:react   # http://localhost:5173
-npm run dev:node    # http://localhost:3001
-```
+## Features
 
-## Admin CMS
+- **Public site:** Home, About, Services, Fleet, Book Now, Pricing, Testimonials, FAQ, Contact, Blog, Privacy, Terms
+- **Booking:** Full BRD form (email, contact preference, vehicle selection, pay online / pay driver)
+- **Notifications:** Twilio SMS to owner + Resend email to customer (configure in `.env`)
+- **Payments:** Stripe Checkout after admin quote
+- **Admin:** Dashboard metrics, bookings, CMS, vehicles, blog, legal pages, CSV reports
+- **SEO:** Per-page meta tags, sitemap, robots.txt, GA4
+- **i18n:** English + French (header language switcher)
+- **Security:** Rate limiting, Cloudflare Turnstile, Zod validation
 
-- URL: http://localhost:5173/admin
-- Default login: `admin` / `admin123` (set `ADMIN_USERNAME` / `ADMIN_PASSWORD` in `node/.env`)
+## API (summary)
 
-Manage site settings, home page content, navigation, bookings, and contact messages.
+| Endpoint | Auth | Description |
+|----------|------|-------------|
+| `/api/bookings` | POST public | Submit booking |
+| `/api/booking-status` | POST public | Lookup by ID + email |
+| `/api/vehicles` | GET public | Fleet list |
+| `/api/blog` | GET public | Blog posts |
+| `/api/admin/stats` | JWT | Dashboard metrics |
+| `/api/admin/reports/bookings` | JWT | CSV export |
+| `/api/payments/create-checkout` | JWT | Stripe payment link |
 
-## API
+See the [implementation plan](docs/High5Limo_Implementation_Plan.md) for the full API spec.
 
-| Endpoint | Method | Auth | Description |
-|----------|--------|------|-------------|
-| `/api/health` | GET | No | Health + DB check |
-| `/api/auth/login` | POST | No | Admin login |
-| `/api/auth/me` | GET | Yes | Current admin |
-| `/api/content` | GET | No | All site content |
-| `/api/content/:section` | GET | No | One section |
-| `/api/content/:section` | PUT | Yes | Update section |
-| `/api/bookings` | GET | Yes | List bookings |
-| `/api/bookings` | POST | No | Submit booking |
-| `/api/bookings/:id` | PATCH | Yes | Update booking |
-| `/api/contact` | GET | Yes | List messages |
-| `/api/contact` | POST | No | Submit message |
-| `/api/payments/create-checkout` | POST | Yes | Create Stripe Checkout link for a quoted booking |
-| `/api/payments/session/:id` | GET | No | Verify Checkout session after redirect |
-| `/api/payments/webhook` | POST | Stripe | Marks booking paid + confirmed |
+## Environment variables
 
-Content, bookings, and messages are stored in **PostgreSQL**.
-
-## Stripe payments (Phase 1)
-
-Quote-first flow:
-
-1. Customer submits a booking (optionally chooses Pay Online).
-2. Admin sets a **quote amount** in Admin → Bookings → **Save Quote**.
-3. Admin clicks **Create Payment Link** (Stripe Checkout Session).
-4. Copy/send the link to the customer.
-5. Customer pays → redirects to `/payment/success` → booking becomes `paymentStatus: paid`, `status: confirmed`.
-
-### Local setup
-
-1. Create a [Stripe test account](https://dashboard.stripe.com/test/apikeys) and copy the **Secret key** (`sk_test_...`).
-2. Put it in `node/.env`:
-
-```
-STRIPE_SECRET_KEY=sk_test_...
-FRONTEND_URL=http://localhost:5173
-STRIPE_CURRENCY=cad
-```
-
-3. (Optional but recommended for webhooks) Install [Stripe CLI](https://stripe.com/docs/stripe-cli) and run:
-
-```bash
-stripe listen --forward-to localhost:3001/api/payments/webhook
-```
-
-Copy the webhook signing secret into `node/.env` as `STRIPE_WEBHOOK_SECRET`.
-
-Without the CLI, payment still works: the success page verifies the session with Stripe and updates the booking.
-
-### Test card
-
-Use Stripe test card `4242 4242 4242 4242`, any future expiry, any CVC.
-
-## Environment variables (`node/.env`)
+### Backend (`node/.env`)
 
 ```
 DATABASE_URL=postgresql://limo:limo_dev_password@localhost:5432/limo_app?schema=public
@@ -121,7 +78,63 @@ JWT_SECRET=change-me-in-production
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin123
 FRONTEND_URL=http://localhost:5173
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
+CORS_ORIGIN=http://localhost:5173
+
+# Stripe
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
 STRIPE_CURRENCY=cad
+
+# Twilio SMS (owner alerts)
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_PHONE_NUMBER=
+ADMIN_PHONE=
+
+# Resend email (customer notifications)
+RESEND_API_KEY=
+EMAIL_FROM="High5 Limo <bookings@high5limo.ca>"
+
+# Cloudflare Turnstile (optional in dev)
+TURNSTILE_SECRET_KEY=
 ```
+
+### Frontend (`react/.env.local`)
+
+```
+VITE_GA_MEASUREMENT_ID=G-XXXXXXXX
+VITE_GOOGLE_MAPS_KEY=
+VITE_TURNSTILE_SITE_KEY=
+```
+
+## Stripe payments
+
+1. Customer submits booking (optionally chooses Pay Online).
+2. Admin sets quote in **Admin → Bookings**.
+3. Check **Email quote to customer** (+ optional Stripe link) → **Save Quote**.
+4. Or click **Create Payment Link** manually.
+5. Customer pays → `/payment/success` → booking confirmed.
+
+Test card: `4242 4242 4242 4242`
+
+Webhook (required for auto-confirm on payment; set `STRIPE_WEBHOOK_SECRET`):
+
+```bash
+stripe listen --forward-to localhost:3001/api/payments/webhook
+```
+
+Without the webhook secret, `/api/payments/webhook` rejects requests. Local success-page verification via `GET /api/payments/session/:id` still works.
+
+## Production deployment
+
+1. **Render:** Deploy using `render.yaml` (API + PostgreSQL)
+2. **Vercel:** Deploy `react/` folder; update `vercel.json` API proxy URL
+3. Set production env vars (Stripe live keys, Twilio, Resend, JWT secret)
+4. Point `high5limo.ca` DNS to Vercel
+5. Register Stripe webhook: `https://YOUR_API/api/payments/webhook`
+
+Details: [docs/High5Limo_Implementation_Plan.md §8](docs/High5Limo_Implementation_Plan.md)
+
+## CI
+
+GitHub Actions runs on push/PR: frontend build + API health check (`.github/workflows/ci.yml`).

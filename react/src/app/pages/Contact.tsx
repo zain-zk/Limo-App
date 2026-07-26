@@ -8,10 +8,14 @@ import { Card, CardContent } from '../components/ui/card';
 import { submitContact } from '../../lib/api';
 import { useContent } from '../../context/ContentContext';
 import { phoneHref } from '../../lib/phone';
+import { Seo } from '../../components/Seo';
+import { PageHero } from '../../components/PageHero';
+import { TurnstileWidget } from '../../components/TurnstileWidget';
 
 export function Contact() {
   const { site } = useContent();
   const [formData, setFormData] = useState({ name: '', phone: '', message: '' });
+  const [turnstileToken, setTurnstileToken] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -37,7 +41,7 @@ export function Contact() {
     if (!validateForm()) return;
     setSubmitting(true);
     try {
-      await submitContact(formData);
+      await submitContact({ ...formData, turnstileToken });
       setSubmitted(true);
       setTimeout(() => {
         setSubmitted(false);
@@ -50,24 +54,20 @@ export function Contact() {
     }
   };
 
+  const showPhone = site.showPhone !== false;
+  const showAddress = site.showAddress === true;
   const address = `${site.address.street}, ${site.address.city}, ${site.address.province} ${site.address.postal}`;
 
   return (
     <div className="min-h-screen pt-20 bg-[#0B0B0B]">
-      <section className="py-20 bg-gradient-to-br from-[#0B0B0B] via-[#0B1F3A] to-[#0B0B0B]">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-6xl text-white mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
-            Contact <span className="text-[#D4AF37]">Us</span>
-          </h1>
-          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-8"></div>
-          <p className="text-xl text-gray-300">Have questions or ready to book? Call us 24/7.</p>
-        </div>
-      </section>
+      <Seo title="Contact Us | High5 Limo" description="Contact High5 Limo 24/7 for luxury limousine bookings across Canada." path="/contact" />
+      <PageHero title="Contact" titleHighlight="Us" subtitle="Have questions or ready to book? Call us 24/7." />
 
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <div className="space-y-4">
+              {showPhone && (
               <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
                 <CardContent className="p-8 text-center">
                   <div className="w-16 h-16 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -81,16 +81,19 @@ export function Contact() {
                   </a>
                 </CardContent>
               </Card>
+              )}
               <Card className="bg-[#1A1A1A] border-[#D4AF37]/20">
                 <CardContent className="p-6 space-y-3">
                   <div className="flex items-center gap-3 text-gray-300">
                     <Mail className="w-5 h-5 text-[#D4AF37]" />
                     <a href={`mailto:${site.email}`} className="hover:text-[#D4AF37]">{site.email}</a>
                   </div>
+                  {showAddress && (
                   <div className="flex items-start gap-3 text-gray-300">
                     <MapPin className="w-5 h-5 text-[#D4AF37] mt-0.5" />
                     <span>{address}</span>
                   </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -125,6 +128,7 @@ export function Contact() {
                         {errors.message && <p className="text-red-500 text-sm mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.message}</p>}
                       </div>
                       {errors.submit && <p className="text-red-500 text-center">{errors.submit}</p>}
+                      <TurnstileWidget onVerify={setTurnstileToken} onExpire={() => setTurnstileToken('')} />
                       <Button type="submit" disabled={submitting} className="w-full bg-[#D4AF37] text-[#0B0B0B] hover:bg-[#D4AF37]/90 text-lg py-6 font-semibold flex items-center justify-center gap-2">
                         <Send className="w-5 h-5" />{submitting ? 'Sending...' : 'Send Message'}
                       </Button>

@@ -8,6 +8,7 @@ function phoneHref(phone: string) {
 
 export function Footer() {
   const { site, navigation } = useContent();
+  const showPhone = site.showPhone !== false;
 
   return (
     <footer className="bg-[#0B1F3A] text-white pt-16 pb-8">
@@ -33,6 +34,9 @@ export function Footer() {
                   <Link to={link.path} className="text-gray-300 hover:text-[#D4AF37] transition-colors text-sm">{link.label}</Link>
                 </li>
               ))}
+              <li><Link to="/blog" className="text-gray-300 hover:text-[#D4AF37] transition-colors text-sm">Blog</Link></li>
+              <li><Link to="/testimonials" className="text-gray-300 hover:text-[#D4AF37] transition-colors text-sm">Testimonials</Link></li>
+              <li><Link to="/booking/status" className="text-gray-300 hover:text-[#D4AF37] transition-colors text-sm">Track Booking</Link></li>
             </ul>
           </div>
 
@@ -51,11 +55,12 @@ export function Footer() {
             <h4 className="text-[#D4AF37] mb-4" style={{ fontFamily: 'var(--font-heading)' }}>Contact Us</h4>
             <ul className="space-y-3">
               <li className="flex items-start">
-                <Phone className="w-5 h-5 text-[#D4AF37] mr-3 mt-0.5 flex-shrink-0" />
+                {showPhone && <Phone className="w-5 h-5 text-[#D4AF37] mr-3 mt-0.5 flex-shrink-0" />}
                 <div>
-                  <a href={phoneHref(site.phone)} className="text-gray-300 hover:text-[#D4AF37] text-sm">{site.phone}</a>
-                  <p className="text-xs text-gray-400">24/7 Support</p>
-                  <a href={`mailto:${site.email}`} className="text-gray-300 hover:text-[#D4AF37] text-sm block mt-1">{site.email}</a>
+                  {showPhone && (
+                    <a href={phoneHref(site.phone)} className="text-gray-300 hover:text-[#D4AF37] text-sm">{site.phone}</a>
+                  )}
+                  <a href={`mailto:${site.email}`} className={`text-gray-300 hover:text-[#D4AF37] text-sm block ${showPhone ? 'mt-1' : ''}`}>{site.email}</a>
                 </div>
               </li>
             </ul>
@@ -73,8 +78,8 @@ export function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
             <p>&copy; 2026 {site.name}. All rights reserved.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-[#D4AF37] transition-colors">Terms of Service</a>
+              <Link to="/privacy" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</Link>
+              <Link to="/terms" className="hover:text-[#D4AF37] transition-colors">Terms of Service</Link>
             </div>
           </div>
         </div>

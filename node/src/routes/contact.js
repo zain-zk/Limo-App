@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { prisma } from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
+import { verifyTurnstile } from '../services/turnstile.js';
+import { contactCreateSchema, parseSchema } from '../validation/schemas.js';
 
 const router = Router();
 
@@ -10,17 +12,21 @@ router.get('/', requireAuth, async (_req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { name, phone, message } = req.body;
+  const parsed = parseSchema(contactCreateSchema, req.body);
+  if (!parsed.ok) {
+    return res.status(400).json({ error: parsed.error, fields: parsed.fields });
+  }
 
-  if (!name?.trim() || !phone?.trim() || !message?.trim()) {
-    return res.status(400).json({ error: 'Name, phone, and message are required' });
+  const captcha = await verifyTurnstile(parsed.data.turnstileToken, req.ip);
+  if (!captcha.success) {
+    return res.status(400).json({ error: captcha.error || 'CAPTCHA verification failed' });
   }
 
   const entry = await prisma.contactMessage.create({
     data: {
-      name: name.trim(),
-      phone: phone.trim(),
-      message: message.trim(),
+      name: parsed.data.name,
+      phone: parsed.data.phone,
+      message: parsed.data.message,
     },
   });
 

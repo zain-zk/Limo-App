@@ -16,30 +16,33 @@ model ContentSection {
 }
 
 model Booking {
-  id                  String   @id @default(uuid())
-  fullName            String
-  phone               String
-  pickupAddress       String
-  dropoffAddress      String
-  date                String
-  time                String
-  passengers          String
-  luggage             String
-  serviceType         String
-  paymentMethod       String
-  flightNumber        String?
-  specialInstructions String?
-  status              String   @default("new")
-  quoteAmount           Float?
-  quoteNotes            String?
-  paymentStatus         String   @default("unpaid")
-  adminNotes            String?
-  stripeSessionId       String?
-  stripePaymentIntentId String?
-  paymentUrl            String?
-  paidAt                DateTime?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                     String    @id @default(uuid())
+  fullName               String
+  email                  String    @default("")
+  phone                  String
+  preferredContactMethod String    @default("phone")
+  pickupAddress          String
+  dropoffAddress         String
+  date                   String
+  time                   String
+  passengers             String
+  luggage                String
+  serviceType            String
+  vehicleSelection       String?
+  paymentMethod          String
+  flightNumber           String?
+  specialInstructions    String?
+  status                 String    @default("pending_quote")
+  quoteAmount            Float?
+  quoteNotes             String?
+  paymentStatus          String    @default("unpaid")
+  adminNotes             String?
+  stripeSessionId        String?
+  stripePaymentIntentId  String?
+  paymentUrl             String?
+  paidAt                 DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
 }
 
 model ContactMessage {
@@ -54,5 +57,34 @@ model AdminUser {
   id           String   @id @default(cuid())
   username     String   @unique
   passwordHash String
+  role         String   @default("superadmin")
   createdAt    DateTime @default(now())
+}
+
+model Vehicle {
+  id         String   @id @default(cuid())
+  name       String
+  slug       String   @unique
+  passengers Int
+  luggage    Int
+  features   String[]
+  imageUrl   String?
+  active     Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model BlogPost {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  excerpt     String?
+  body        String
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  seoTitle    String?
+  seoDesc     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

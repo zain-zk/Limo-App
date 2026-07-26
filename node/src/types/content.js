@@ -13,4 +13,5 @@ export const CONTENT_SECTIONS = [
   'testimonials',
   'faq',
   'contact',
+  'legal',
 ];

@@ -4,6 +4,8 @@ import { Card, CardContent } from '../components/ui/card';
 import { MessageSquare, Phone, ArrowRight, CheckCircle } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 import { phoneHref } from '../../lib/phone';
+import { PageHero } from '../../components/PageHero';
+import { Seo } from '../../components/Seo';
 
 export function Pricing() {
   const { site } = useContent();
@@ -17,15 +19,8 @@ export function Pricing() {
 
   return (
     <div className="min-h-screen pt-20 bg-[#0B0B0B]">
-      <section className="py-20 bg-gradient-to-br from-[#0B0B0B] via-[#0B1F3A] to-[#0B0B0B]">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-6xl text-white mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
-            Request a <span className="text-[#D4AF37]">Quote</span>
-          </h1>
-          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-8"></div>
-          <p className="text-xl text-gray-300">Personalized quotes from our team — every trip is unique.</p>
-        </div>
-      </section>
+      <Seo title="Pricing | High5 Limo" description="Get a personalized quote for your trip — transparent pricing with no hidden fees." path="/pricing" />
+      <PageHero title="Request a" titleHighlight="Quote" subtitle="Personalized quotes from our team — every trip is unique." />
 
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4">
@@ -40,7 +35,7 @@ export function Pricing() {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {steps.map((step, i) => (
-                  <div key={i} className="flex gap-4">
+                  <div key={i} className="flex gap-4 p-4 rounded-lg bg-[#0B0B0B]/50 border border-[#D4AF37]/10 hover:border-[#D4AF37]/40 transition-colors">
                     <div className="w-8 h-8 bg-[#D4AF37] text-[#0B0B0B] rounded-full flex items-center justify-center font-bold flex-shrink-0">{i + 1}</div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">{step.title}</h4>

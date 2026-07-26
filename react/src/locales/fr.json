@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "bookNow": "Réserver",
+    "blog": "Blogue",
+    "bookingStatus": "Statut de réservation"
+  },
+  "book": {
+    "title": "Réservez votre",
+    "titleHighlight": "trajet de luxe",
+    "subtitle": "Soumettez votre demande et notre équipe vous contactera avec un devis personnalisé.",
+    "fullName": "Nom complet",
+    "email": "Adresse courriel",
+    "phone": "Numéro de téléphone",
+    "preferredContact": "Méthode de contact préférée",
+    "contactEmail": "Courriel",
+    "contactPhone": "Téléphone",
+    "vehicle": "Véhicule préféré",
+    "selectVehicle": "Choisir un véhicule (optionnel)",
+    "submit": "Soumettre la demande",
+    "success": "Demande envoyée!",
+    "successMessage": "Merci d'avoir choisi High5 Limo. Notre équipe examinera votre demande et vous contactera sous peu avec un devis.",
+    "trackBooking": "Suivre le statut de votre réservation",
+    "bookingIdNote": "Conservez votre ID de réservation pour vérifier le statut à tout moment."
+  },
+  "bookingStatus": {
+    "title": "Vérifier le statut",
+    "subtitle": "Entrez votre ID de réservation et courriel pour voir le statut de votre trajet.",
+    "bookingId": "ID de réservation",
+    "email": "Adresse courriel",
+    "lookup": "Rechercher",
+    "notFound": "Réservation introuvable. Vérifiez votre ID et courriel."
+  },
+  "common": {
+    "loading": "Chargement...",
+    "required": "Requis"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français"
+  }
+}

@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main, feature/**]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: limo
+          POSTGRES_PASSWORD: limo_dev_password
+          POSTGRES_DB: limo_app
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install root deps
+        run: npm run install:all
+
+      - name: Build frontend
+        run: npm run build --prefix react
+
+      - name: Setup API database
+        working-directory: node
+        env:
+          DATABASE_URL: postgresql://limo:limo_dev_password@localhost:5432/limo_app?schema=public
+          JWT_SECRET: ci-test-secret
+        run: |
+          npx prisma db push
+          npm run db:seed
+
+      - name: Verify API starts
+        working-directory: node
+        env:
+          DATABASE_URL: postgresql://limo:limo_dev_password@localhost:5432/limo_app?schema=public
+          JWT_SECRET: ci-test-secret
+        run: |
+          node src/index.js &
+          sleep 3
+          curl -f http://localhost:3001/api/health

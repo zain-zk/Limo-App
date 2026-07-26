@@ -12,7 +12,6 @@ export function PaymentSuccess() {
   const [loading, setLoading] = useState(Boolean(sessionId));
   const [booking, setBooking] = useState<{
     id: string;
-    fullName: string;
     quoteAmount?: number | null;
     paymentStatus?: string;
     status?: string;
@@ -50,7 +49,7 @@ export function PaymentSuccess() {
                     Payment <span className="text-[#D4AF37]">Received</span>
                   </h1>
                   <p className="text-gray-300 mb-6">
-                    Thank you{booking?.fullName ? `, ${booking.fullName}` : ''}. Your ride is confirmed. Our team will contact you with trip details.
+                    Thank you. Your ride is confirmed. Our team will contact you with trip details.
                   </p>
                   {booking?.quoteAmount != null && (
                     <p className="text-[#D4AF37] text-xl mb-2">${Number(booking.quoteAmount).toFixed(2)} CAD</p>
