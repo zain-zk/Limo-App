@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/sitemap.xml", "destination": "https://YOUR_RENDER_API_URL/sitemap.xml" },
     { "source": "/api/(.*)", "destination": "https://YOUR_RENDER_API_URL/api/$1" }
   ],
   "headers": [

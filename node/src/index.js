@@ -8,6 +8,7 @@ import contactRoutes from './routes/contact.js';
 import paymentRoutes, { handleStripeWebhook } from './routes/payments.js';
 import bookingStatusRoutes from './routes/bookingStatus.js';
 import adminRoutes, { vehiclesRouter, blogRouter } from './routes/admin.js';
+import { sitemapHandler } from './routes/sitemap.js';
 import { prisma } from './db.js';
 import { isStripeConfigured } from './services/stripe.js';
 import { isEmailConfigured } from './services/email.js';
@@ -25,6 +26,9 @@ app.use(cors({ origin: corsOrigin.split(',').map((o) => o.trim()) }));
 app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
 
 app.use(express.json({ limit: '2mb' }));
+
+app.get('/sitemap.xml', sitemapHandler);
+app.get('/api/sitemap.xml', sitemapHandler);
 
 app.get('/api/health', async (_req, res) => {
   try {

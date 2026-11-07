@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { prisma } from '../db.js';
+import { fleetImageFor } from '../lib/fleetImages.js';
 import { requireAuth } from '../middleware/auth.js';
 
 const router = Router();
@@ -99,17 +100,34 @@ router.get('/reports/bookings', requireAuth, async (req, res) => {
 /** Vehicle CRUD mounted at /api/vehicles */
 export const vehiclesRouter = Router();
 
+async function repairVehicleImages(vehicles) {
+  const repaired = [];
+  for (const vehicle of vehicles) {
+    const imageUrl = fleetImageFor(vehicle.name, vehicle.imageUrl);
+    if ((imageUrl || null) !== (vehicle.imageUrl || null)) {
+      const updated = await prisma.vehicle.update({
+        where: { id: vehicle.id },
+        data: { imageUrl },
+      });
+      repaired.push(updated);
+    } else {
+      repaired.push(vehicle);
+    }
+  }
+  return repaired;
+}
+
 vehiclesRouter.get('/', async (_req, res) => {
   const vehicles = await prisma.vehicle.findMany({
     where: { active: true },
     orderBy: { sortOrder: 'asc' },
   });
-  res.json(vehicles);
+  res.json(await repairVehicleImages(vehicles));
 });
 
 vehiclesRouter.get('/all', requireAuth, async (_req, res) => {
   const vehicles = await prisma.vehicle.findMany({ orderBy: { sortOrder: 'asc' } });
-  res.json(vehicles);
+  res.json(await repairVehicleImages(vehicles));
 });
 
 vehiclesRouter.post('/', requireAuth, async (req, res) => {

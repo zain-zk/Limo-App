@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import {
   LogOut, Save, RefreshCw, LayoutDashboard, Settings, Home, Menu,
   Calendar, MessageSquare, Loader2, Info, HelpCircle, Plus, Trash2, Link2, Copy,
-  Car, FileText, Scale,
+  Car, FileText, Scale, Sun, Moon,
 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 import { Button } from '../components/ui/button';
@@ -15,12 +15,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { useContent } from '../../context/ContentContext';
 import {
   login, fetchMe, clearAuthToken, getAuthToken,
-  updateSection, fetchBookings, updateBooking, createPaymentLink, fetchContactMessages,
+  updateSection, fetchBookings, updateBooking, createPaymentLink, fetchContactMessages, deleteBooking,
   type Booking,
 } from '../../lib/api';
 import type { SiteContent, HomeContent, NavItem, AboutContent, FaqContent } from '../../types/content';
 import { DEFAULT_ABOUT, DEFAULT_FAQ, DEFAULT_HOME, DEFAULT_NAVIGATION, DEFAULT_SITE, DEFAULT_LEGAL } from '../../lib/defaults';
 import { DashboardPanel, VehiclesPanel, BlogPanel, LegalForm } from './admin/AdminPanels';
+import { CmsThemeProvider, useCmsTheme } from '../../context/cms-theme';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 
 function AdminLogin({ onSuccess }: { onSuccess: (username: string) => void }) {
   const [username, setUsername] = useState('');
@@ -257,6 +259,8 @@ function BookingCard({ booking, onUpdated }: { booking: Booking; onUpdated: () =
   const [saving, setSaving] = useState(false);
   const [creatingLink, setCreatingLink] = useState(false);
   const [paymentUrl, setPaymentUrl] = useState(booking.paymentUrl ?? '');
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const saveQuote = async () => {
     setSaving(true);
@@ -457,9 +461,39 @@ function BookingCard({ booking, onUpdated }: { booking: Booking; onUpdated: () =
               {creatingLink ? <Loader2 className="w-4 h-4 animate-spin" /> : <Link2 className="w-4 h-4 mr-1" />}
               {booking.paymentStatus === 'paid' ? 'Paid' : 'Create Payment Link'}
             </Button>
+            <Button
+              type="button"
+              size="icon"
+              variant="outline"
+              aria-label={`Delete booking for ${booking.fullName}`}
+              onClick={() => setConfirmDelete(true)}
+              className="border-red-500/30 text-red-400"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </CardContent>
+      <ConfirmDialog
+        open={confirmDelete}
+        title="Delete booking?"
+        description={`The booking for "${booking.fullName}" will be permanently removed. This cannot be undone.`}
+        onOpenChange={setConfirmDelete}
+        onConfirm={async () => {
+          if (deleting) return;
+          setDeleting(true);
+          try {
+            await deleteBooking(booking.id);
+            toast.success('Booking deleted');
+            setConfirmDelete(false);
+            onUpdated();
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'Delete failed');
+          } finally {
+            setDeleting(false);
+          }
+        }}
+      />
     </Card>
   );
 }
@@ -630,7 +664,7 @@ function FaqContentForm({ initial, onSaved }: { initial: FaqContent; onSaved: ()
                     }}
                     className="bg-[#1A1A1A] border-[#D4AF37]/20 text-white"
                   />
-                  <Button type="button" variant="outline" size="icon" onClick={() => removeItem(i)} className="border-red-500/30 text-red-400 shrink-0">
+                  <Button type="button" variant="outline" size="icon" onClick={() => removeItem(i)} aria-label={`Delete question: ${item.question || 'untitled'}`} className="border-red-500/30 text-red-400 shrink-0">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
@@ -730,9 +764,10 @@ function MessagesPanel() {
 
 function AdminDashboard({ username, onLogout }: { username: string; onLogout: () => void }) {
   const { site, home, navigation, about, faq, content, refresh } = useContent();
+  const { theme, toggleTheme } = useCmsTheme();
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F]">
+    <div className={`min-h-screen ${theme === 'light' ? 'cms-light bg-[#f6f4f1]' : 'bg-[#0F0F0F]'}`}>
       <header className="border-b border-[#D4AF37]/20 bg-[#0B0B0B]">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -743,6 +778,16 @@ function AdminDashboard({ username, onLogout }: { username: string; onLogout: ()
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={toggleTheme}
+              aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+              className="border-[#D4AF37]/30 text-[#D4AF37]"
+            >
+              {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+            </Button>
             <Button variant="outline" onClick={refresh} className="border-[#D4AF37]/30 text-[#D4AF37]">
               <RefreshCw className="w-4 h-4 mr-2" /> Refresh
             </Button>
@@ -850,11 +895,30 @@ export function Admin() {
 
   return (
     <>
-      <Toaster position="top-right" theme="dark" />
+      <CmsThemeProvider>
+        <AdminShell username={username} onLogout={logout} onLogin={setUsername} />
+      </CmsThemeProvider>
+    </>
+  );
+}
+
+function AdminShell({
+  username,
+  onLogout,
+  onLogin,
+}: {
+  username: string | null;
+  onLogout: () => void;
+  onLogin: (username: string) => void;
+}) {
+  const { theme } = useCmsTheme();
+  return (
+    <>
+      <Toaster position="top-right" theme={theme} />
       {username ? (
-        <AdminDashboard username={username} onLogout={logout} />
+        <AdminDashboard username={username} onLogout={onLogout} />
       ) : (
-        <AdminLogin onSuccess={setUsername} />
+        <AdminLogin onSuccess={onLogin} />
       )}
     </>
   );

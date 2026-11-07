@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { fetchBlogPost, type BlogPost } from '../../lib/api';
 import { Seo } from '../../components/Seo';
+import { useContent } from '../../context/ContentContext';
+import { postMetaDescription } from '../../lib/postMeta';
 
 export function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
+  const { site } = useContent();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [error, setError] = useState(false);
 
@@ -38,7 +41,7 @@ export function BlogPostPage() {
     <div className="min-h-screen pt-20 bg-[#0B0B0B]">
       <Seo
         title={post.seoTitle || `${post.title} | High5 Limo Blog`}
-        description={post.seoDesc || post.excerpt || undefined}
+        description={postMetaDescription(post, site.seo?.defaultDescription)}
         path={`/blog/${post.slug}`}
       />
       <article className="py-20">

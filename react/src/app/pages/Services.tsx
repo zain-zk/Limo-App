@@ -1,14 +1,17 @@
 import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { useContent } from '../../context/ContentContext';
 import { resolveIcon } from '../../lib/icons';
+import { resolvePublicServices } from '../../lib/servicesCatalog';
 import { PageHero } from '../../components/PageHero';
 import { Seo } from '../../components/Seo';
 
 export function Services() {
+  const { t, i18n } = useTranslation();
   const { home } = useContent();
-  const services = home.services;
+  const services = resolvePublicServices(home.services, t, i18n.language);
 
   return (
     <div className="min-h-screen pt-20">
@@ -29,7 +32,7 @@ export function Services() {
                     <h3 className="text-2xl text-white mb-3" style={{ fontFamily: 'var(--font-heading)' }}>{service.title}</h3>
                     <p className="text-gray-400 mb-6 flex-1 leading-relaxed">{service.description}</p>
                     <Link to="/book">
-                      <Button className="w-full bg-[#D4AF37] text-[#0B0B0B] hover:bg-[#c9a12f] font-semibold transition-colors">Book This Service</Button>
+                      <Button className="w-full bg-[#D4AF37] text-[#0B0B0B] hover:bg-[#c9a12f] font-semibold transition-colors">{t('services.bookCta')}</Button>
                     </Link>
                   </CardContent>
                 </Card>

@@ -2,13 +2,27 @@ import { Router } from 'express';
 import { prisma } from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
 import { CONTENT_SECTIONS } from '../types/content.js';
+import { repairFleetList } from '../lib/fleetImages.js';
 
 const router = Router();
+
+async function withRepairedFleet(content) {
+  const home = content.home;
+  if (!home || typeof home !== 'object' || !Array.isArray(home.fleet)) return content;
+  const { fleet, changed } = repairFleetList(home.fleet);
+  if (!changed) return content;
+  const nextHome = { ...home, fleet };
+  await prisma.contentSection.update({
+    where: { key: 'home' },
+    data: { data: nextHome },
+  });
+  return { ...content, home: nextHome };
+}
 
 router.get('/', async (_req, res) => {
   const sections = await prisma.contentSection.findMany();
   const content = Object.fromEntries(sections.map((s) => [s.key, s.data]));
-  res.json(content);
+  res.json(await withRepairedFleet(content));
 });
 
 router.get('/sections', (_req, res) => {

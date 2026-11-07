@@ -203,7 +203,7 @@ export function BookNow() {
                         <Label htmlFor="serviceType" className="text-white">Service Type *</Label>
                         <select id="serviceType" name="serviceType" value={formData.serviceType} onChange={handleChange} className={`form-select mt-2 ${errors.serviceType ? 'border-red-500' : ''}`}>
                           <option value="">Select a service</option>
-                          {SERVICE_TYPES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+                          {SERVICE_TYPES.map((s) => <option key={s.value} value={s.value}>{t(`services.items.${s.value}.title`, { defaultValue: s.label })}</option>)}
                         </select>
                       </div>
                       <div>

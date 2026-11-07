@@ -14,10 +14,11 @@ export const SERVICE_AREAS = [
 ];
 
 export const SERVICE_TYPES = [
-  { value: 'airport', label: 'Airport Transfer' },
-  { value: 'corporate', label: 'Corporate Transportation' },
+  { value: 'airport', label: 'Airport Pickup & Drop-off' },
+  { value: 'short-distance', label: 'Short Distance' },
+  { value: 'long-distance', label: 'Long Distance' },
+  { value: 'corporate', label: 'Corporate Travel' },
   { value: 'wedding', label: 'Wedding Service' },
-  { value: 'special', label: 'Special Occasion' },
-  { value: 'hourly', label: 'Hourly Service' },
-  { value: 'long-distance', label: 'Long Distance Service' },
+  { value: 'special', label: 'Special Occasions' },
+  { value: 'hourly', label: 'Hourly Chauffeur Service' },
 ] as const;

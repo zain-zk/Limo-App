@@ -324,6 +324,12 @@ export async function updateVehicle(id: string, data: Partial<Vehicle>) {
   return response.json();
 }
 
+export async function deleteBooking(id: string) {
+  const response = await authFetch(`${API_BASE}/bookings/${id}`, { method: 'DELETE' });
+  if (!response.ok) throw new Error('Failed to delete booking');
+  return response.json();
+}
+
 export async function deleteVehicle(id: string) {
   const response = await authFetch(`${API_BASE}/vehicles/${id}`, { method: 'DELETE' });
   if (!response.ok) throw new Error('Failed to delete vehicle');

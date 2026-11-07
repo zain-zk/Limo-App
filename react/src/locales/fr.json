@@ -37,5 +37,39 @@
   "language": {
     "en": "English",
     "fr": "Français"
+  },
+  "services": {
+    "bookCta": "Réserver ce service",
+    "footerTitle": "Services",
+    "items": {
+      "airport": {
+        "title": "Prise en charge et dépôt à l'aéroport",
+        "description": "Prise en charge et dépôt fiables vers les principaux aéroports du Canada, avec suivi de vol pour des arrivées à l'heure."
+      },
+      "short-distance": {
+        "title": "Courte distance",
+        "description": "Trajets urbains premium pour soupers, réunions et destinations locales, en tout confort."
+      },
+      "long-distance": {
+        "title": "Longue distance",
+        "description": "Transferts interurbains de luxe avec chauffeur professionnel pour un voyage détendu."
+      },
+      "corporate": {
+        "title": "Voyages d'affaires",
+        "description": "Transport professionnel pour réunions, conférences et événements d'affaires. Impressionnez vos clients."
+      },
+      "wedding": {
+        "title": "Service de mariage",
+        "description": "Rendez votre journée inoubliable avec notre flotte de luxe. Des chauffeurs professionnels pour une expérience sans stress."
+      },
+      "special": {
+        "title": "Occasions spéciales",
+        "description": "Trajets de luxe pour bals, anniversaires, fêtes et célébrations qui méritent le meilleur."
+      },
+      "hourly": {
+        "title": "Service de chauffeur à l'heure",
+        "description": "Service de chauffeur à l'heure, flexible pour événements, magasinage ou itinéraires à plusieurs arrêts."
+      }
+    }
   }
 }

@@ -53,13 +53,13 @@ export const DEFAULT_HOME: HomeContent = {
     buttonLabel: 'Request Quote',
   },
   services: [
-    { icon: 'Plane', title: 'Airport Transfers', description: 'Reliable airport pickups and drop-offs with flight tracking across all major Canadian airports.' },
-    { icon: 'Briefcase', title: 'Corporate Transportation', description: 'Executive travel for meetings, conferences, and corporate events with professional chauffeurs.' },
-    { icon: 'Heart', title: 'Wedding Transportation', description: 'Elegant wedding day transportation for the bride, groom, and wedding party in luxury GMC vehicles.' },
-    { icon: 'PartyPopper', title: 'Special Occasions', description: 'Luxury rides for proms, anniversaries, birthdays, and celebrations that deserve the best.' },
-    { icon: 'MapPin', title: 'Short Distance Rides', description: 'Premium city travel for dinners, meetings, and local destinations with comfort and style.' },
-    { icon: 'Car', title: 'Long Distance Rides', description: 'Intercity luxury transfers with rest stops, Wi-Fi, and refreshments for a relaxing journey.' },
-    { icon: 'Timer', title: 'Hourly Chauffeur Service', description: 'Flexible hourly bookings for events, shopping, or multi-stop itineraries at your pace.' },
+    { icon: 'Plane', title: 'Airport Pickup & Drop-off', description: 'Reliable pickup and drop-off service to all major airports across Canada. Track your flight for timely arrivals.' },
+    { icon: 'MapPin', title: 'Short Distance', description: 'Premium city travel for dinners, meetings, and local destinations with comfort and style.' },
+    { icon: 'Car', title: 'Long Distance', description: 'Intercity luxury transfers with a professional chauffeur for a relaxed journey.' },
+    { icon: 'Briefcase', title: 'Corporate Travel', description: 'Professional transportation for business meetings, conferences, and corporate events. Impress your clients.' },
+    { icon: 'Heart', title: 'Wedding Service', description: 'Make your special day unforgettable with our luxury fleet. Professional chauffeurs ensure a stress-free experience.' },
+    { icon: 'PartyPopper', title: 'Special Occasions', description: 'Luxury rides for proms, anniversaries, birthdays, galas, and celebrations.' },
+    { icon: 'Timer', title: 'Hourly Chauffeur Service', description: 'Flexible hourly chauffeur service for events, shopping, or multi-stop itineraries at your pace.' },
   ],
   whyChooseUs: [
     { icon: 'Car', title: 'Luxury Vehicles', description: 'Premium GMC fleet' },
@@ -70,9 +70,9 @@ export const DEFAULT_HOME: HomeContent = {
     { icon: 'Star', title: 'On-Time Guarantee', description: 'Punctual every ride' },
   ],
   fleet: [
-    { name: 'GMC Yukon XL', passengers: 6, luggage: 6, features: ['Wi-Fi', 'Leather Seats', 'Climate Control', 'Premium Sound'], image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80' },
-    { name: 'GMC Yukon Denali', passengers: 6, luggage: 5, features: ['Wi-Fi', 'Heated Seats', 'Panoramic Roof', 'Entertainment System'], image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80' },
-    { name: 'Cadillac Escalade', passengers: 7, luggage: 7, features: ['Wi-Fi', 'Premium Interior', 'Advanced Safety', 'Luxury Comfort'], image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&q=80' },
+    { name: 'GMC Yukon XL', passengers: 6, luggage: 6, features: ['Wi-Fi', 'Leather Seats', 'Climate Control', 'Premium Sound'], image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/2021_GMC_Yukon_XL_SLT%2C_front_9.24.20.jpg/1280px-2021_GMC_Yukon_XL_SLT%2C_front_9.24.20.jpg' },
+    { name: 'GMC Yukon Denali', passengers: 6, luggage: 5, features: ['Wi-Fi', 'Heated Seats', 'Panoramic Roof', 'Entertainment System'], image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/GMC_Yukon_Denali_%28GMTT1XX%29_Washington_DC_Metro_Area%2C_USA.jpg/1280px-GMC_Yukon_Denali_%28GMTT1XX%29_Washington_DC_Metro_Area%2C_USA.jpg' },
+    { name: 'Cadillac Escalade', passengers: 7, luggage: 7, features: ['Wi-Fi', 'Premium Interior', 'Advanced Safety', 'Luxury Comfort'], image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/2021_Cadillac_Escalade_Premium_Luxury%2C_front_3.7.22.jpg/1280px-2021_Cadillac_Escalade_Premium_Luxury%2C_front_3.7.22.jpg' },
   ],
   testimonials: [
     { name: 'Sarah Johnson', role: 'Corporate Executive', rating: 5, text: 'Exceptional service! The driver was professional, punctual, and the vehicle was pristine. High5 Limo made my airport transfer seamless.' },
