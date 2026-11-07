@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { prisma } from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
 import { sendBookingSms } from '../services/sms.js';
+import { sendBookingWhatsApp } from '../services/whatsapp.js';
 import { sendBookingAckEmail, sendQuoteEmail } from '../services/email.js';
 import { verifyTurnstile } from '../services/turnstile.js';
 import { bookingCreateSchema, parseSchema } from '../validation/schemas.js';
@@ -58,7 +59,7 @@ router.post('/', async (req, res) => {
     },
   });
 
-  const notifications = { sms: null, email: null };
+  const notifications = { sms: null, email: null, whatsapp: null };
 
   try {
     notifications.sms = await sendBookingSms(booking);
@@ -70,6 +71,12 @@ router.post('/', async (req, res) => {
     notifications.email = await sendBookingAckEmail(booking);
   } catch (err) {
     notifications.email = { sent: false, error: err.message };
+  }
+
+  try {
+    notifications.whatsapp = await sendBookingWhatsApp(booking);
+  } catch (err) {
+    notifications.whatsapp = { sent: false, error: err.message };
   }
 
   res.status(201).json({ success: true, booking, notifications });
