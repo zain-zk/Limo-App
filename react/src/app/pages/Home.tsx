@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import {
   Car, ChevronLeft, ChevronRight, Star, Users, Briefcase, ChevronDown, MapPin, Quote,
 } from 'lucide-react';
@@ -10,6 +11,8 @@ import { Card, CardContent } from '../components/ui/card';
 import { SERVICE_AREAS, SERVICE_TYPES } from '../../lib/constants';
 import { useContent } from '../../context/ContentContext';
 import { resolveIcon } from '../../lib/icons';
+import { fleetImageFor } from '../../lib/fleetImages';
+import { resolvePublicServices } from '../../lib/servicesCatalog';
 import { Seo } from '../../components/Seo';
 import { FeatureStrip } from '../../components/FeatureStrip';
 
@@ -40,13 +43,15 @@ function SectionHeader({ title, highlight, subtitle }: { title: string; highligh
 
 export function Home() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const { site, home } = useContent();
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [quickForm, setQuickForm] = useState({
     pickup: '', dropoff: '', date: '', time: '', passengers: '1', luggage: '1', serviceType: '',
   });
 
-  const { hero, quoteWidget, services, whyChooseUs, fleet, testimonials, cta } = home;
+  const { hero, quoteWidget, services: cmsServices, whyChooseUs, fleet, testimonials, cta } = home;
+  const services = resolvePublicServices(cmsServices, t, i18n.language);
 
   const handleQuickChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setQuickForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -156,7 +161,7 @@ export function Home() {
                     <Label className="text-white text-sm">Service Type</Label>
                     <select name="serviceType" value={quickForm.serviceType} onChange={handleQuickChange} className="form-select mt-1.5">
                       <option value="">Select service</option>
-                      {SERVICE_TYPES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+                      {SERVICE_TYPES.map((s) => <option key={s.value} value={s.value}>{t(`services.items.${s.value}.title`, { defaultValue: s.label })}</option>)}
                     </select>
                   </div>
                 </div>
@@ -222,9 +227,9 @@ export function Home() {
             {fleet.map((vehicle, index) => (
               <Card key={index} className="group bg-[#1A1A1A] border-[#D4AF37]/15 hover:border-[#D4AF37]/50 overflow-hidden flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40">
                 <div className="h-52 relative overflow-hidden bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A]">
-                  {vehicle.image ? (
+                  {fleetImageFor(vehicle.name, vehicle.image) ? (
                     <img
-                      src={vehicle.image}
+                      src={fleetImageFor(vehicle.name, vehicle.image)}
                       alt={vehicle.name}
                       loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

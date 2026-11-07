@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { useContent } from '../../context/ContentContext';
+import { fleetImageFor } from '../../lib/fleetImages';
 import { PageHero } from '../../components/PageHero';
 import { Seo } from '../../components/Seo';
 
@@ -21,9 +22,9 @@ export function Fleet() {
             {vehicles.map((vehicle, index) => (
               <Card key={index} className="group bg-[#1A1A1A] border-[#D4AF37]/15 hover:border-[#D4AF37]/50 overflow-hidden flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40">
                 <div className="h-52 relative overflow-hidden bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A]">
-                  {vehicle.image ? (
+                  {fleetImageFor(vehicle.name, vehicle.image) ? (
                     <img
-                      src={vehicle.image}
+                      src={fleetImageFor(vehicle.name, vehicle.image)}
                       alt={vehicle.name}
                       loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

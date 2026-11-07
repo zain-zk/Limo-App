@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Loader2, Save, Download, Plus, Trash2, Car, FileText, BarChart3 } from 'lucide-react';
+import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
@@ -90,6 +91,7 @@ export function DashboardPanel() {
 export function VehiclesPanel() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pendingDelete, setPendingDelete] = useState<Vehicle | null>(null);
 
   const load = () => {
     setLoading(true);
@@ -121,12 +123,29 @@ export function VehiclesPanel() {
             <Input defaultValue={v.imageUrl || ''} onBlur={(e) => updateVehicle(v.id, { imageUrl: e.target.value }).then(load)} className="bg-[#1A1A1A] border-[#D4AF37]/20 text-white" placeholder="Image URL" />
             <div className="flex gap-2">
               <label className="flex items-center gap-2 text-white text-sm"><input type="checkbox" defaultChecked={v.active} onChange={(e) => updateVehicle(v.id, { active: e.target.checked }).then(load)} /> Active</label>
-              <Button size="sm" variant="outline" onClick={() => deleteVehicle(v.id).then(load)} className="border-red-500/30 text-red-400"><Trash2 className="w-4 h-4" /></Button>
+              <Button type="button" size="icon" variant="outline" aria-label={`Delete ${v.name}`} onClick={() => setPendingDelete(v)} className="border-red-500/30 text-red-400"><Trash2 className="w-4 h-4" /></Button>
             </div>
           </CardContent>
         </Card>
       ))}
       {!vehicles.length && <p className="text-gray-400 flex items-center gap-2"><Car className="w-4 h-4" /> No vehicles yet.</p>}
+      <ConfirmDialog
+        open={!!pendingDelete}
+        title="Delete vehicle?"
+        description={pendingDelete ? `"${pendingDelete.name}" will be removed from the fleet. This cannot be undone.` : ''}
+        onOpenChange={(open) => { if (!open) setPendingDelete(null); }}
+        onConfirm={async () => {
+          if (!pendingDelete) return;
+          try {
+            await deleteVehicle(pendingDelete.id);
+            toast.success('Vehicle deleted');
+            setPendingDelete(null);
+            load();
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'Delete failed');
+          }
+        }}
+      />
     </div>
   );
 }
@@ -134,6 +153,7 @@ export function VehiclesPanel() {
 export function BlogPanel() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pendingDelete, setPendingDelete] = useState<BlogPost | null>(null);
 
   const load = () => {
     setLoading(true);
@@ -164,12 +184,29 @@ export function BlogPanel() {
             <Textarea defaultValue={p.body} rows={4} onBlur={(e) => updateBlogPost(p.id, { body: e.target.value }).then(load)} className="bg-[#1A1A1A] border-[#D4AF37]/20 text-white" />
             <div className="flex flex-wrap gap-3 items-center">
               <label className="flex items-center gap-2 text-white text-sm"><input type="checkbox" defaultChecked={p.published} onChange={(e) => updateBlogPost(p.id, { published: e.target.checked }).then(load)} /> Published</label>
-              <Button size="sm" variant="outline" onClick={() => deleteBlogPost(p.id).then(load)} className="border-red-500/30 text-red-400"><Trash2 className="w-4 h-4" /></Button>
+              <Button type="button" size="icon" variant="outline" aria-label={`Delete ${p.title}`} onClick={() => setPendingDelete(p)} className="border-red-500/30 text-red-400"><Trash2 className="w-4 h-4" /></Button>
             </div>
           </CardContent>
         </Card>
       ))}
       {!posts.length && <p className="text-gray-400 flex items-center gap-2"><FileText className="w-4 h-4" /> No posts yet.</p>}
+      <ConfirmDialog
+        open={!!pendingDelete}
+        title="Delete post?"
+        description={pendingDelete ? `"${pendingDelete.title}" will be removed. This cannot be undone.` : ''}
+        onOpenChange={(open) => { if (!open) setPendingDelete(null); }}
+        onConfirm={async () => {
+          if (!pendingDelete) return;
+          try {
+            await deleteBlogPost(pendingDelete.id);
+            toast.success('Post deleted');
+            setPendingDelete(null);
+            load();
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'Delete failed');
+          }
+        }}
+      />
     </div>
   );
 }

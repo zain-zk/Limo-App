@@ -1,0 +1,69 @@
+/* Light CMS skin. Public pages stay on their own dark palette. */
+.cms-light {
+  background-color: #f6f4f1;
+  color: #1c1917;
+}
+
+.cms-light .bg-\[\#0F0F0F\] {
+  background-color: #f6f4f1 !important;
+}
+
+.cms-light .bg-\[\#0B0B0B\],
+.cms-light .bg-\[\#1A1A1A\] {
+  background-color: #ffffff !important;
+}
+
+.cms-light .text-white {
+  color: #1c1917 !important;
+}
+
+.cms-light .text-gray-300 {
+  color: #44403c !important;
+}
+
+.cms-light .text-gray-400,
+.cms-light .text-gray-500 {
+  color: #57534e !important;
+}
+
+.cms-light .border-\[\#D4AF37\]\/10,
+.cms-light .border-\[\#D4AF37\]\/20 {
+  border-color: rgba(160, 124, 28, 0.35) !important;
+}
+
+/* Outline controls and inactive tabs use the dark-site foreground unless reset. */
+.cms-light .bg-background {
+  background-color: #ffffff !important;
+  color: #1c1917 !important;
+}
+
+.cms-light header button,
+.cms-light header a {
+  color: #1c1917;
+}
+
+.cms-light [role="tab"] {
+  color: #1c1917 !important;
+}
+
+.cms-light [role="tab"][data-state="active"] {
+  background-color: #d4af37 !important;
+  color: #0b0b0b !important;
+}
+
+.cms-light .text-red-400,
+.cms-light .text-red-500 {
+  color: #dc2626 !important;
+}
+
+.cms-light input,
+.cms-light textarea,
+.cms-light select {
+  background-color: #ffffff;
+  color: #1c1917;
+}
+
+.cms-light input::placeholder,
+.cms-light textarea::placeholder {
+  color: #78716c;
+}

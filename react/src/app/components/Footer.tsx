@@ -1,14 +1,18 @@
 import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Phone, Facebook, Instagram, Twitter } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
+import { resolvePublicServices } from '../../lib/servicesCatalog';
 
 function phoneHref(phone: string) {
   return `tel:${phone.replace(/[^\d+]/g, '')}`;
 }
 
 export function Footer() {
-  const { site, navigation } = useContent();
+  const { t, i18n } = useTranslation();
+  const { site, navigation, home } = useContent();
   const showPhone = site.showPhone !== false;
+  const services = resolvePublicServices(home.services, t, i18n.language);
 
   return (
     <footer className="bg-[#0B1F3A] text-white pt-16 pb-8">
@@ -41,11 +45,11 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-[#D4AF37] mb-4" style={{ fontFamily: 'var(--font-heading)' }}>Services</h4>
+            <h4 className="text-[#D4AF37] mb-4" style={{ fontFamily: 'var(--font-heading)' }}>{t('services.footerTitle')}</h4>
             <ul className="space-y-2">
-              {['Airport Transfers', 'Corporate Transportation', 'Wedding Transportation', 'Special Occasions', 'Hourly Chauffeur', 'Long Distance'].map((service) => (
-                <li key={service}>
-                  <Link to="/services" className="text-gray-300 hover:text-[#D4AF37] transition-colors text-sm">{service}</Link>
+              {services.map((service) => (
+                <li key={service.title}>
+                  <Link to="/services" className="text-gray-300 hover:text-[#D4AF37] transition-colors text-sm">{service.title}</Link>
                 </li>
               ))}
             </ul>

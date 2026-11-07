@@ -37,5 +37,39 @@
   "language": {
     "en": "English",
     "fr": "Français"
+  },
+  "services": {
+    "bookCta": "Book this service",
+    "footerTitle": "Services",
+    "items": {
+      "airport": {
+        "title": "Airport Pickup & Drop-off",
+        "description": "Reliable pickup and drop-off service to all major airports across Canada. Track your flight for timely arrivals."
+      },
+      "short-distance": {
+        "title": "Short Distance",
+        "description": "Premium city travel for dinners, meetings, and local destinations with comfort and style."
+      },
+      "long-distance": {
+        "title": "Long Distance",
+        "description": "Intercity luxury transfers with a professional chauffeur for a relaxed journey."
+      },
+      "corporate": {
+        "title": "Corporate Travel",
+        "description": "Professional transportation for business meetings, conferences, and corporate events. Impress your clients."
+      },
+      "wedding": {
+        "title": "Wedding Service",
+        "description": "Make your special day unforgettable with our luxury fleet. Professional chauffeurs ensure a stress-free experience."
+      },
+      "special": {
+        "title": "Special Occasions",
+        "description": "Luxury rides for proms, anniversaries, birthdays, galas, and celebrations."
+      },
+      "hourly": {
+        "title": "Hourly Chauffeur Service",
+        "description": "Flexible hourly chauffeur service for events, shopping, or multi-stop itineraries at your pace."
+      }
+    }
   }
 }
