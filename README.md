@@ -91,6 +91,11 @@ TWILIO_AUTH_TOKEN=
 TWILIO_PHONE_NUMBER=
 ADMIN_PHONE=
 
+# Twilio WhatsApp (owner alerts; independent of SMS). No real secrets.
+TWILIO_WHATSAPP_NUMBER=
+ADMIN_WHATSAPP=
+TWILIO_WHATSAPP_CONTENT_SID=
+
 # Resend email (customer notifications)
 RESEND_API_KEY=
 EMAIL_FROM="High5 Limo <bookings@high5limo.ca>"
@@ -125,6 +130,27 @@ stripe listen --forward-to localhost:3001/api/payments/webhook
 
 Without the webhook secret, `/api/payments/webhook` rejects requests. Local success-page verification via `GET /api/payments/session/:id` still works.
 
+## WhatsApp booking alerts
+
+Submitting the public Book form still sends the Twilio SMS (when SMS settings are set) and the Resend acknowledgement to the customer. It also attempts a server-side WhatsApp message to the admin. This is separate from the site's floating WhatsApp button, which only opens a `wa.me` chat for the visitor.
+
+The booking is saved even when WhatsApp is not configured or Twilio returns an error. Unconfigured environments log the message and return `notifications.whatsapp` with `provider: "console"`.
+
+### Sandbox
+
+1. In Twilio Console open **Messaging → Try it out → Send a WhatsApp message**.
+2. From the admin's phone, send the sandbox join phrase (it looks like `join <two-words>`) to the sandbox number, usually **+1 415 523 8886**.
+3. Set the existing `TWILIO_ACCOUNT_SID` and `TWILIO_AUTH_TOKEN`.
+4. Set `TWILIO_WHATSAPP_NUMBER` to that sandbox sender, for example `+14155238886`.
+5. Set `ADMIN_WHATSAPP` to the admin phone in E.164, including the country code. If it is omitted, `ADMIN_PHONE` is used when it looks like a phone number. A 10-digit North American number is prefixed with `+1`.
+6. Leave `TWILIO_WHATSAPP_CONTENT_SID` empty. The API then sends a free-form body, which the sandbox accepts for numbers that have joined.
+
+### Production template
+
+WhatsApp Business delivers business-initiated messages outside the 24-hour session only through an approved template. Create a Twilio Content template with these variables, in order: customer name, email, phone, preferred contact, service, vehicle, date, time, passengers, bags, pickup, drop-off, flight number. Missing vehicle or flight is sent as `N/A`. End the template body with static text so it does not end on a variable. Set `TWILIO_WHATSAPP_CONTENT_SID` to that template's `HX...` SID and `TWILIO_WHATSAPP_NUMBER` to the WhatsApp-enabled sender.
+
+Do not commit real Twilio secrets, join codes, or phone numbers. See `node/.env.example`.
+
 ## Production deployment
 
 1. **Render:** Deploy using `render.yaml` (API + PostgreSQL)
@@ -137,4 +163,4 @@ Details: [docs/High5Limo_Implementation_Plan.md §8](docs/High5Limo_Implementati
 
 ## CI
 
-GitHub Actions runs on push/PR: frontend build + API health check (`.github/workflows/ci.yml`).
+GitHub Actions runs on push/PR: frontend build, API notification tests, and API health check (`.github/workflows/ci.yml`).

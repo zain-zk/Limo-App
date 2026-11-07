@@ -35,6 +35,10 @@ jobs:
       - name: Install root deps
         run: npm run install:all
 
+      - name: Test API notification helpers
+        working-directory: node
+        run: npm test
+
       - name: Build frontend
         run: npm run build --prefix react
 

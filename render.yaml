@@ -40,6 +40,12 @@ services:
         sync: false
       - key: ADMIN_PHONE
         sync: false
+      - key: TWILIO_WHATSAPP_NUMBER
+        sync: false
+      - key: ADMIN_WHATSAPP
+        sync: false
+      - key: TWILIO_WHATSAPP_CONTENT_SID
+        sync: false
       - key: TURNSTILE_SECRET_KEY
         sync: false
       - key: ADMIN_USERNAME
